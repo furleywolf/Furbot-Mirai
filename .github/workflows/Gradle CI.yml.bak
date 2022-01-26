@@ -47,4 +47,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: furbot-mirai-*.jar
+          name: furbot-mirai
+          path: furbot-mirai/build/libs/furbot-mirai-*.jar

@@ -48,4 +48,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: furbot-mirai
-          path: furbot-mirai/build/libs/furbot-mirai-*.jar
+          path: build/libs/furbot-mirai-*.jar
