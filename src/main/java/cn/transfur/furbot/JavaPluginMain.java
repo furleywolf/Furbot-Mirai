@@ -13,6 +13,7 @@ import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -60,25 +61,16 @@ public final class JavaPluginMain extends JavaPlugin {
         });
     }
 
+    /**
+     * 初始化配置文件
+     */
     private void initProperties() {
         InputStream in = JavaPluginMain.class.getClassLoader().getResourceAsStream("config.yml");
+        Yaml yaml = new Yaml(new Constructor(Config.class));
+        Config config = yaml.load(in);
 
-        if (in == null){
-            getLogger().info("in is null");
-        }
-        Yaml yaml = new Yaml();
-        Map<String, Object> map = yaml.loadAs(in, Map.class);
-
-        Object furcom = map.get("furbot");
-        assert furcom == null;
-        Map<String, Object> furcom1 = (Map<String, Object>) furcom;
-
-        String testProp1 = furcom1.get("prop1").toString();
-        String testProp2 = furcom1.get("prop2").toString();
-
-        getLogger().info("prop1 = " + testProp1);
-        getLogger().info("prop2 = " + testProp2);
-
+        getLogger().info("prop1 = " + config.getFurbot().getProp1());
+        getLogger().info("prop2 = " + config.getFurbot().getProp1());
     }
 
 }
