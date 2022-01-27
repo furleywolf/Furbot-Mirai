@@ -42,10 +42,10 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew buildPlugin
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: furbot-mirai
-          path: build/libs/furbot-mirai-*.jar
+          path: build/mirai/furbot-mirai-*.jar
