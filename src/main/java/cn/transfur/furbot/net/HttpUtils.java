@@ -1,5 +1,6 @@
 package cn.transfur.furbot.net;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -19,13 +20,6 @@ public class HttpUtils {
 
     /**
      * get
-     *
-     * @param host
-     * @param path
-     * @param headers
-     * @param querys
-     * @return
-     * @throws Exception
      */
     public static Response doGet(String host, String path, Map<String, String> headers,
                                  Map<String, String> querys) {
@@ -51,105 +45,18 @@ public class HttpUtils {
         return null;
     }
 
-//    /**
-//     * post form
-//     *
-//     * @param host
-//     * @param path
-//     * @param method
-//     * @param headers
-//     * @param querys
-//     * @param bodys
-//     * @return
-//     * @throws Exception
-//     */
-//    public static HttpResponse doPost(String host, String path, String method,
-//                                      Map<String, String> headers,
-//                                      Map<String, String> querys,
-//                                      Map<String, String> bodys)
-//            throws Exception {
-//        HttpClient httpClient = wrapClient(host);
-//
-//        HttpPost request = new HttpPost(buildUrl(host, path, querys));
-//        for (Map.Entry<String, String> e : headers.entrySet()) {
-//            request.addHeader(e.getKey(), e.getValue());
-//        }
-//
-//        if (bodys != null) {
-//            List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
-//
-//            for (String key : bodys.keySet()) {
-//                nameValuePairList.add(new BasicNameValuePair(key, bodys.get(key)));
-//            }
-//            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(nameValuePairList, "utf-8");
-//            formEntity.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
-//            request.setEntity(formEntity);
-//        }
-//
-//        return httpClient.execute(request);
-//    }
-//
-//    /**
-//     * Post String
-//     *
-//     * @param host
-//     * @param path
-//     * @param method
-//     * @param headers
-//     * @param querys
-//     * @param body
-//     * @return
-//     * @throws Exception
-//     */
-//    public static HttpResponse doPost(String host, String path, String method,
-//                                      Map<String, String> headers,
-//                                      Map<String, String> querys,
-//                                      String body)
-//            throws Exception {
-//        HttpClient httpClient = wrapClient(host);
-//
-//        HttpPost request = new HttpPost(buildUrl(host, path, querys));
-//        for (Map.Entry<String, String> e : headers.entrySet()) {
-//            request.addHeader(e.getKey(), e.getValue());
-//        }
-//
-//        if (isNotBlank(body)) {
-//            request.setEntity(new StringEntity(body, "utf-8"));
-//        }
-//
-//        return httpClient.execute(request);
-//    }
-//
-//    /**
-//     * Post stream
-//     *
-//     * @param host
-//     * @param path
-//     * @param method
-//     * @param headers
-//     * @param querys
-//     * @param body
-//     * @return
-//     * @throws Exception
-//     */
-//    public static HttpResponse doPost(String host, String path, String method,
-//                                      Map<String, String> headers,
-//                                      Map<String, String> querys,
-//                                      byte[] body)
-//            throws Exception {
-//        HttpClient httpClient = wrapClient(host);
-//
-//        HttpPost request = new HttpPost(buildUrl(host, path, querys));
-//        for (Map.Entry<String, String> e : headers.entrySet()) {
-//            request.addHeader(e.getKey(), e.getValue());
-//        }
-//
-//        if (body != null) {
-//            request.setEntity(new ByteArrayEntity(body));
-//        }
-//
-//        return httpClient.execute(request);
-//    }
+    public static byte[] doGetFileInputStream(String url){
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        try {
+            return client.newCall(request).execute().body().bytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private static String buildUrl(String host, String path, Map<String, String> querys) throws UnsupportedEncodingException {
         StringBuilder sbUrl = new StringBuilder();
