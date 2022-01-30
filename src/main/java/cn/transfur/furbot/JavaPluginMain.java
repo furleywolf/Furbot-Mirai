@@ -17,9 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 import cn.transfur.furbot.base.Config;
 import cn.transfur.furbot.bot.BotParser;
@@ -38,6 +36,7 @@ public final class JavaPluginMain extends JavaPlugin {
     private JavaPluginMain() {
         super(new JvmPluginDescriptionBuilder("cn.transfur.furbot", "0.1.0")
                 .name("FurBot")
+                .author("Jmeow")
                 .info("furbot-mirai")
                 .build());
     }
@@ -46,7 +45,11 @@ public final class JavaPluginMain extends JavaPlugin {
     public void onLoad(@NotNull PluginComponentStorage $this$onLoad) {
         gson = new GsonBuilder().disableHtmlEscaping().create();
         initProperties();
-        getLogger().info("User " + config.getFurbot().getQq() + "Plugin init success.");
+        if (config == null) {
+            config = new Config();
+            getLogger().info("模板配置文件已生成，请在/config/cn.transfur.furbot/config.yml中编辑配置文件。");
+        }
+        getLogger().info("Plugin init success. Bot id : " + config.getFurbot().getQq());
     }
 
     @Override
@@ -54,6 +57,9 @@ public final class JavaPluginMain extends JavaPlugin {
         EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
         //监听群消息
         eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {
+            if (!config.getFurbot().isResponseGroup()) {
+                return;
+            }
             //解析并响应消息
             BotParser.parseMessage(g, new BotResponse() {
                 @Override
@@ -69,6 +75,9 @@ public final class JavaPluginMain extends JavaPlugin {
         });
         //监听好友消息
         eventChannel.subscribeAlways(FriendMessageEvent.class, f -> {
+            if (!config.getFurbot().isResponseFriend()) {
+                return;
+            }
             //解析并响应消息
             BotParser.parseMessage(f, new BotResponse() {
                 @Override
@@ -94,6 +103,32 @@ public final class JavaPluginMain extends JavaPlugin {
             config = yaml.load(new FileInputStream(file));
         } catch (FileNotFoundException e) {
             getLogger().error("配置文件未找到");
+            createNewConfigFile(file);
+        }
+    }
+
+    /**
+     * 创建新的配置文件
+     *
+     * @param file File
+     */
+    private void createNewConfigFile(File file) {
+        try (InputStream in = getResourceAsStream("TemplateConfig.yml");
+             FileOutputStream out = new FileOutputStream(file)) {
+            file.createNewFile();
+            streamCopy(in, out);
+        } catch (IOException ioException) {
+            getLogger().error("文件写入失败");
+        }
+    }
+
+    private void streamCopy(InputStream in, FileOutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        while (true) {
+            int byteRead = in.read(buffer);
+            if (byteRead == -1)
+                break;
+            out.write(buffer, 0, byteRead);
         }
     }
 

@@ -6,6 +6,10 @@ package cn.transfur.furbot.base;
  */
 public class Config {
 
+    public Config() {
+        furbot = new Furbot();
+    }
+
     private Furbot furbot;
 
     public Furbot getFurbot() {
@@ -22,6 +26,10 @@ public class Config {
 
         private String authKey;
 
+        private boolean responseFriend;
+
+        private boolean responseGroup;
+
         public String getQq() {
             return qq;
         }
@@ -36,6 +44,22 @@ public class Config {
 
         public void setAuthKey(String authKey) {
             this.authKey = authKey;
+        }
+
+        public boolean isResponseFriend() {
+            return responseFriend;
+        }
+
+        public void setResponseFriend(boolean responseFriend) {
+            this.responseFriend = responseFriend;
+        }
+
+        public boolean isResponseGroup() {
+            return responseGroup;
+        }
+
+        public void setResponseGroup(boolean responseGroup) {
+            this.responseGroup = responseGroup;
         }
     }
 
