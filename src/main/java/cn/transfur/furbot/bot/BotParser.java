@@ -29,6 +29,7 @@ public class BotParser {
     private static final String T_RAND_FURSUIT = "来只毛";
     private static final String T_GET_FURSUIT_BY_NAME = "来只\\s*(.*)";
     private static final String T_GET_FURSUIT_BY_ID = "找毛图\\s*(.*)";
+    private static final String STR_TAIL = "---By绒狸-开源版---";
 
     private static final Config config = JavaPluginMain.INSTANCE.getConfig();
 
@@ -52,8 +53,10 @@ public class BotParser {
             return;
         }
 
+        msg = msg.trim();
+
         //来只毛
-        if (msg.equals(T_RAND_FURSUIT)) {
+        if (msg.startsWith(T_RAND_FURSUIT)) {
             getFursuitRand(sender, response);
             return;
         }
@@ -104,6 +107,8 @@ public class BotParser {
                         "搜索方法:全局随机")
                 .append(sender.uploadImage(ExternalResource.create(bytes)));
 
+        appendTail(builder);
+
         MessageChain build = builder.build();
 
         response.onResponse(build);
@@ -129,7 +134,7 @@ public class BotParser {
 
         if (furryPic.getName() == null) {
             MessageChainBuilder builder = new MessageChainBuilder()
-                    .append("这只毛毛还没有被收录，请联系开发者添加哦");
+                    .append("这只毛毛还没有被收录，请联系开发者添加哦~");
 
             response.onResponse(builder.build());
             return;
@@ -149,6 +154,8 @@ public class BotParser {
                         "毛毛名字:" + furryPic.getName() + " \n" +
                         "搜索方法: 模糊")
                 .append(sender.uploadImage(ExternalResource.create(bytes)));
+
+        appendTail(builder);
 
         MessageChain build = builder.build();
 
@@ -174,7 +181,7 @@ public class BotParser {
 
         if (furryPic.getName() == null) {
             MessageChainBuilder builder = new MessageChainBuilder()
-                    .append("这只毛毛还没有被收录，请联系开发者添加哦");
+                    .append("这只毛毛还没有被收录，请联系开发者添加哦~");
 
             response.onResponse(builder.build());
             return;
@@ -194,6 +201,8 @@ public class BotParser {
                         "毛毛名字:" + furryPic.getName() + " \n" +
                         "搜索方法: 按FurID查找")
                 .append(sender.uploadImage(ExternalResource.create(bytes)));
+
+        appendTail(builder);
 
         MessageChain build = builder.build();
 
@@ -229,5 +238,14 @@ public class BotParser {
             return matcher.group(1);
         }
         return null;
+    }
+
+    /**
+     * 拼接尾巴
+     */
+    private static void appendTail(MessageChainBuilder builder) {
+        if (config.getFurbot().isShowTail()) {
+            builder.append(STR_TAIL);
+        }
     }
 }

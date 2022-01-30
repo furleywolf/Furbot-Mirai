@@ -26,6 +26,8 @@ public class Config {
 
         private String authKey;
 
+        private boolean showTail;
+
         private boolean responseFriend;
 
         private boolean responseGroup;
@@ -60,6 +62,14 @@ public class Config {
 
         public void setResponseGroup(boolean responseGroup) {
             this.responseGroup = responseGroup;
+        }
+
+        public boolean isShowTail() {
+            return showTail;
+        }
+
+        public void setShowTail(boolean showTail) {
+            this.showTail = showTail;
         }
     }
 
