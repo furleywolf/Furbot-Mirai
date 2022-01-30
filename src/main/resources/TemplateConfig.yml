@@ -3,6 +3,8 @@ furbot:
   qq: 0
   #此处填写申请开源版地址的授权码
   authKey: 0
+  #显示绒狸开源版尾巴（推荐开启）
+  showTail: true
   #是否响应私聊消息 true 响应  false 不响应
   responseFriend: true
   #是否响应群聊消息
