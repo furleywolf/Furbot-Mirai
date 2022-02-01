@@ -41,3 +41,19 @@ furbot:
 点击下方接口填写问卷，或加入群（893579624）询问相关事宜。
 
 [![申请接口](https://img.shields.io/badge/申请接口-填写问卷-green)](https://wj.qq.com/s2/9668371/f3bc/)
+
+API已实现的接口
+```
+- api/v2/getFursuitRand
+  来只毛
+  无需其他参数
+- api/v2/getFursuitByID
+  找毛图
+  传入：fid
+- api/v2/getFursuitByName
+  来只
+  传入：name 需进行urlencode
+- api/v2/getFursuitFid
+  查fid
+  传入：name 需进行urlencode
+```
