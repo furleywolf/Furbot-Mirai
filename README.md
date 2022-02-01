@@ -19,7 +19,7 @@
 ### 如何使用
 
 1. 请先安装并配置好[Mirai Console](https://github.com/mamoe/mirai-console) ，或者您可以使用[Mirai Console Loader](https://github.com/iTXTech/mirai-console-loader)。
-2. 将本插件放置在`/plugins`目录下，并启动一次`mirai-console`，插件会自动生成模板配置文件供填写。
+2. [下载插件](https://github.com/furleywolf/Furbot-Mirai/releases/latest)，将本插件放置在`/plugins`目录下，并启动一次`mirai-console`，插件会自动生成模板配置文件供填写。
 3. 配置文件的位置`config/cn.transfur.furbot/config.yml`，请根据实际需要，填写对应配置项。
 4. 配置文件的具体内容见下方`配置相关`。
 
