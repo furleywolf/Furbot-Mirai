@@ -9,7 +9,7 @@
 [![开发者QQ](https://img.shields.io/badge/Mantainer-FurleyWolf-orange.svg)](http://wpa.qq.com/msgrd?v=3&uin=2111626525&site=qq&menu=yes)
 [![QQ交流群](https://img.shields.io/badge/QQ交流群-893579624-green.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=bdY6XA2HJWKZJ3Hu2QRhuheINZJuCAdd&jump_from=webapi)
 [![Gradle CI](https://github.com/furleywolf/Furbot-Mirai/actions/workflows/Gradle%20CI.yml/badge.svg)](https://github.com/furleywolf/Furbot-Mirai/actions/workflows/Gradle%20CI.yml)
-[![Release](https://img.shields.io/github/v/release/furleywolf/Furbot-Mirai?color=blueviolet&include_prereleases)](https://github.com/Mrs4s/go-cqhttp/releases)
+[![Release](https://img.shields.io/github/v/release/furleywolf/Furbot-Mirai?color=blueviolet&include_prereleases)](https://github.com/furleywolf/Furbot-Mirai/releases)
 </div>
 
 ### 这是什么
