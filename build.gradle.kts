@@ -1,28 +1,32 @@
-plugins {
-    val kotlinVersion = "1.4.30"
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.serialization") version kotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-    id("net.mamoe.mirai-console") version "2.9.2"
+plugins {
+    kotlin("jvm")
+    kotlin("plugin.serialization")
+
+    id("net.mamoe.mirai-console")
 }
 
-group = "cn.transfur"
-version = "0.1.1"
-
 repositories {
-    mavenLocal()
-    mavenCentral()
     maven("https://maven.aliyun.com/repository/public") // 阿里云国内代理仓库
+    mavenCentral()
 }
 
 dependencies {
-    //Gson
+    // Gson
     implementation("com.google.code.gson:gson:2.8.9")
-    // https://mvnrepository.com/artifact/org.yaml/snakeyaml
+    // SnakeYaml
     implementation("org.yaml:snakeyaml:1.30")
-    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    // Okhttp 3
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
-    api("net.mamoe:mirai-console-terminal:2.9.2") // 自行替换版本
-    api("net.mamoe:mirai-core:2.9.2")
+    val miraiVersion: String by project
+    api("net.mamoe:mirai-console-terminal:$miraiVersion")
+    api("net.mamoe:mirai-core:$miraiVersion")
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
+    }
 }
