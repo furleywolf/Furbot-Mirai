@@ -28,12 +28,12 @@ object KotlinPluginMain : KotlinPlugin(
     private fun subscribe() {
         val channel = GlobalEventChannel.parentScope(this)
         channel.subscribeAlways<GroupMessageEvent> {
-            if (group.id !in Config.responseGroups)
+            if (!Config.respondGroups)
                 return@subscribeAlways
             CommandRunner.run(this)
         }
         channel.subscribeAlways<FriendMessageEvent> {
-            if (friend.id !in Config.responseFriends)
+            if (!Config.respondFriends)
                 return@subscribeAlways
             CommandRunner.run(this)
         }
