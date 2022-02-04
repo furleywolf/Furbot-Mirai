@@ -31,9 +31,9 @@ object FurryPicClient {
     ): FurryPic? {
         val timestamp = System.currentTimeMillis() / 1000L
         val parameters = mapOf(
-            "qq" to Config.qq,
+            "qq" to Config.furbot.qq,
             "timestamp" to timestamp,
-            "sign" to buildSignString(apiPath, timestamp, Config.authKey),
+            "sign" to buildSignString(apiPath, timestamp, Config.furbot.authKey),
             *extraParameters
         )
 

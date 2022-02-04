@@ -2,7 +2,6 @@
 <div align="center">
   <img src="https://oss.tail.icu/static/logo-api.png"  height = "150" alt="炸毛框架"><br>
 
-
 [![License](https://img.shields.io/github/license/furleywolf/Furbot-Mirai)](https://github.com/furleywolf/Furbot-Mirai/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/furleywolf/Furbot-Mirai)](https://github.com/furleywolf/Furbot-Mirai/stargazers)
 [![Jmeow](https://img.shields.io/badge/Author-Jmeow-blue)](http://www.jmeow.org)
@@ -19,25 +18,28 @@
 ### 如何使用
 
 1. 请先安装并配置好[Mirai Console](https://github.com/mamoe/mirai-console) ，或者您可以使用[Mirai Console Loader](https://github.com/iTXTech/mirai-console-loader)。
-2. 将本插件放置在`/plugins`目录下，并启动一次`mirai-console`，插件会自动生成模板配置文件供填写。
+2. 将本插件放置在`plugins`目录下，并启动一次`mirai-console`，插件会自动生成模板配置文件供填写。
 3. 配置文件的位置`config/cn.transfur.furbot/config.yml`，请根据实际需要，填写对应配置项。
 4. 配置文件的具体内容见下方`配置相关`。
 
-### 配置相关
+#### 配置相关
+
 ```yaml
 furbot:
-  #此处填写申请开源版地址的QQ号码
+  # 申请开源版地址的 QQ 号码
   qq: 0
-  #此处填写申请开源版地址的授权码
+  # 申请开源版地址的授权码
   authKey: 0
-  #显示绒狸开源版尾巴（推荐开启）
+  # 是否显示绒狸开源版尾巴（默认开启）
   showTail: true
-  #是否响应私聊消息 true 响应  false 不响应
-  responseFriend: true
-  #是否响应群聊消息
-  responseGroup: true
+  # 是否响应私聊消息（默认关闭）
+  respondFriends: false
+  # 是否响应群聊消息（默认开启）
+  respondGroups: true
 ```
+
 ### 申请接口
+
 点击下方接口填写问卷，或加入群（893579624）询问相关事宜。
 
 [![申请接口](https://img.shields.io/badge/申请接口-填写问卷-green)](https://wj.qq.com/s2/9668371/f3bc/)

@@ -19,7 +19,7 @@ interface GetFurStrategy {
     }
 
     fun MessageChainBuilder.addTail() {
-        if (Config.showTail)
+        if (Config.furbot.showTail)
             add("--- 绒狸开源版 ---")
     }
 }
