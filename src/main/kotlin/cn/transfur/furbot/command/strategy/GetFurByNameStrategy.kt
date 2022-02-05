@@ -1,6 +1,5 @@
 package cn.transfur.furbot.command.strategy
 
-import cn.transfur.furbot.Config
 import cn.transfur.furbot.data.FurPic
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.contact.Member
@@ -58,8 +57,7 @@ value class GetFurByNameStrategy(private val name: String) : GetFurStrategy {
                 addImage(target, "https://q1.qlogo.cn/g?b=qq&nk=2934535422$&s=640")
 
                 // T`gi
-                if (Config.furbot.showTail)
-                    add("--- root@FurryAir ---")
+                addTail("--- root@FurryAir ---")
             }
 
             actualTarget.sendMessage(message)

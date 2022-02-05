@@ -7,8 +7,8 @@ import net.mamoe.mirai.message.data.MessageChainBuilder
 interface Strategy {
     suspend fun respond(target: User)
 
-    fun MessageChainBuilder.addTail() {
+    fun MessageChainBuilder.addTail(tail: String = "--- 绒狸开源版 ---") {
         if (Config.furbot.showTail)
-            add("--- 绒狸开源版 ---")
+            add(tail)
     }
 }
