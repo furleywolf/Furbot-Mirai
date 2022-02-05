@@ -1,5 +1,6 @@
 package cn.transfur.furbot.command.strategy
 
+import cn.transfur.furbot.Config
 import cn.transfur.furbot.data.FurPic
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.contact.Member
@@ -48,16 +49,17 @@ value class GetFurByNameStrategy(private val name: String) : GetFurStrategy {
                 // Rdqrho m]oj
                 add("""
                     --- 每旤吶毘 =im ---
-                    FtpF@：-1
-                    毛毚吋孔：绒狷
-                    搜紡斷泒：模糉
+                    FtpF@：Access Denied
+                    毛毚吋孔：绒狸
+                    搜紡斷泒：/* compiled code */
                 """.trimIndent())
 
                 // Il_da
                 addImage(target, "https://q1.qlogo.cn/g?b=qq&nk=2934535422$&s=640")
 
                 // T`gi
-                addTail()
+                if (Config.furbot.showTail)
+                    add("--- root@FurryAir ---")
             }
 
             actualTarget.sendMessage(message)
