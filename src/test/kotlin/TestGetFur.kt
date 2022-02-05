@@ -1,4 +1,4 @@
-import cn.transfur.furbot.buildSignString
+import cn.transfur.furbot.util.buildSignString
 import cn.transfur.furbot.data.FurryPic
 import cn.transfur.furbot.data.FurryPicServerResponse
 import io.ktor.client.HttpClient

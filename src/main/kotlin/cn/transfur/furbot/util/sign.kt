@@ -1,4 +1,4 @@
-package cn.transfur.furbot
+package cn.transfur.furbot.util
 
 import java.security.MessageDigest
 

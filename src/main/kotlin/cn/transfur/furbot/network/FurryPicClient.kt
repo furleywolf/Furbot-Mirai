@@ -1,7 +1,8 @@
 package cn.transfur.furbot.network
 
 import cn.transfur.furbot.Config
-import cn.transfur.furbot.buildSignString
+import cn.transfur.furbot.KotlinPluginMain
+import cn.transfur.furbot.util.buildSignString
 import cn.transfur.furbot.data.FurryPic
 import cn.transfur.furbot.data.FurryPicServerResponse
 import io.ktor.client.HttpClient
@@ -12,6 +13,7 @@ import io.ktor.client.request.url
 import io.ktor.client.request.parameter
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import net.mamoe.mirai.utils.warning
 
 object FurryPicClient {
     private const val API_HOST: String = "https://api.tail.icu/"
@@ -44,6 +46,7 @@ object FurryPicClient {
             }
             json.decodeFromString(serializer, response).data
         } catch (e: ClientRequestException) {
+            KotlinPluginMain.logger.warning { e.message }
             null
         }
     }

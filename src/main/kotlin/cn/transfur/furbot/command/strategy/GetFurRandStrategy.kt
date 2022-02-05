@@ -1,4 +1,4 @@
-package cn.transfur.furbot.strategy
+package cn.transfur.furbot.command.strategy
 
 import cn.transfur.furbot.data.FurryPic
 import cn.transfur.furbot.network.FurryPicClient

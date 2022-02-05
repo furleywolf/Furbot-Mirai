@@ -1,4 +1,4 @@
-package cn.transfur.furbot.strategy
+package cn.transfur.furbot.command.strategy
 
 import cn.transfur.furbot.data.FurryPic
 import cn.transfur.furbot.network.FurryPicClient
@@ -6,9 +6,9 @@ import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.message.data.buildMessageChain
 
 @JvmInline
-value class GetFurByIdStrategy(private val id: String) : GetFurStrategy {
+value class GetFurByNameStrategy(private val name: String) : GetFurStrategy {
     override suspend fun getFur(): FurryPic? {
-        return FurryPicClient.doGetFur(API_PATH, "fid" to id)
+        return FurryPicClient.doGetFur(API_PATH, "name" to name)
     }
 
     override suspend fun respond(target: Contact, furryPic: FurryPic?) {
@@ -21,7 +21,7 @@ value class GetFurByIdStrategy(private val id: String) : GetFurStrategy {
                     --- 每日吸毛 Bot ---
                     FurID：${furryPic.id}
                     毛毛名字：${furryPic.name}
-                    搜索方法：按 FurID 查找
+                    搜索方法：模糊
                 """.trimIndent())
 
                 // Image
@@ -36,6 +36,6 @@ value class GetFurByIdStrategy(private val id: String) : GetFurStrategy {
     }
 
     companion object {
-        private const val API_PATH = "api/v2/getFursuitByID"
+        private const val API_PATH = "api/v2/getFursuitByName"
     }
 }

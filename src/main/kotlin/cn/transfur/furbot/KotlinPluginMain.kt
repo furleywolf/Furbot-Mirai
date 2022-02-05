@@ -1,5 +1,6 @@
 package cn.transfur.furbot
 
+import cn.transfur.furbot.command.CommandRunner
 import cn.transfur.furbot.network.FurryPicClient
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
