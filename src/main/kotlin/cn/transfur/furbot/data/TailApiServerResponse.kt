@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FurryPicServerResponse<T>(
+data class TailApiServerResponse<T>(
     val code: Int,
     @SerialName("msg")
     val message: String,

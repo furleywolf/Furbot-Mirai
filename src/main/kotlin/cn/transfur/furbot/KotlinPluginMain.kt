@@ -1,7 +1,7 @@
 package cn.transfur.furbot
 
 import cn.transfur.furbot.command.CommandRunner
-import cn.transfur.furbot.network.FurryPicClient
+import cn.transfur.furbot.network.TailApiClient
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.GlobalEventChannel
@@ -21,7 +21,7 @@ object KotlinPluginMain : KotlinPlugin(
     override fun onEnable() {
         Config.reload()
 
-        FurryPicClient.open()
+        TailApiClient.open()
 
         subscribe()
     }
@@ -41,6 +41,6 @@ object KotlinPluginMain : KotlinPlugin(
     }
 
     override fun onDisable() {
-        FurryPicClient.close()
+        TailApiClient.close()
     }
 }

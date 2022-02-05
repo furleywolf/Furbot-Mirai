@@ -32,8 +32,10 @@ object GoodNightStrategy : Strategy {
 
             // Message to sent
             val message = buildMessageChain(2) {
+                // Ping
                 add(At(target))
 
+                // Info
                 val daySpecification = if (atNight) "明天" else "今天"
                 add("禁言到$daySpecification ${Config.goodNight.endTime}，晚安！")
             }
@@ -48,7 +50,10 @@ object GoodNightStrategy : Strategy {
             target.mute(muteDuration.toInt())
         } else {
             val message = buildMessageChain(2) {
+                // Ping
                 add(At(target))
+
+                // Info
                 add("太早了，不能晚安")
             }
 

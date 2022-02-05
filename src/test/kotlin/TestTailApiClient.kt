@@ -1,6 +1,6 @@
+import cn.transfur.furbot.data.FurId
 import cn.transfur.furbot.util.buildSignString
-import cn.transfur.furbot.data.FurryPic
-import cn.transfur.furbot.data.FurryPicServerResponse
+import cn.transfur.furbot.data.TailApiServerResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.request.get
@@ -10,19 +10,18 @@ import kotlinx.serialization.json.Json
 
 private val json = Json { ignoreUnknownKeys = true }
 
-private val serializer = FurryPicServerResponse.serializer(FurryPic.serializer())
-
 suspend fun main() {
     val response = HttpClient(OkHttp).use {
         val timestamp = System.currentTimeMillis() / 1000L
-        val apiPath = "api/v2/getFursuitByID"
+        val apiPath = "api/v2/getFursuitFid"
         it.get<String> {
             url("https://api.tail.icu/$apiPath")
             parameter("qq", System.getenv("qq"))
             parameter("timestamp", timestamp)
             parameter("sign", buildSignString(apiPath, timestamp, System.getenv("authKey")))
-            parameter("fid", "3004")
+            parameter("name", "花生")
         }
     }
+    val serializer = TailApiServerResponse.serializer(FurId.serializer())
     println(json.decodeFromString(serializer, response))
 }

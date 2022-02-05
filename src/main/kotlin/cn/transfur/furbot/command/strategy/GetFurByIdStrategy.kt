@@ -1,31 +1,32 @@
 package cn.transfur.furbot.command.strategy
 
-import cn.transfur.furbot.data.FurryPic
-import cn.transfur.furbot.network.FurryPicClient
+import cn.transfur.furbot.data.FurPic
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.message.data.buildMessageChain
 
 @JvmInline
 value class GetFurByIdStrategy(private val id: String) : GetFurStrategy {
-    override suspend fun getFur(): FurryPic? {
-        return FurryPicClient.doGetFur(API_PATH, "fid" to id)
+    companion object {
+        private const val API_PATH: String = "api/v2/getFursuitByID"
     }
 
-    override suspend fun respond(target: Contact, furryPic: FurryPic?) {
-        if (furryPic == null) {
+    override suspend fun getFurPic(): FurPic? = getFurPicSimple(API_PATH, "fid" to id)
+
+    override suspend fun respond(target: Contact, furPic: FurPic?) {
+        if (furPic == null) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")
         } else {
             val message = buildMessageChain(3) {
-                // Head
+                // Result text
                 add("""
                     --- 每日吸毛 Bot ---
-                    FurID：${furryPic.id}
-                    毛毛名字：${furryPic.name}
+                    FurID：${furPic.id}
+                    毛毛名字：${furPic.name}
                     搜索方法：按 FurID 查找
                 """.trimIndent())
 
                 // Image
-                addImage(target, furryPic)
+                addImage(target, furPic.url)
 
                 // Tail
                 addTail()
@@ -33,9 +34,5 @@ value class GetFurByIdStrategy(private val id: String) : GetFurStrategy {
 
             target.sendMessage(message)
         }
-    }
-
-    companion object {
-        private const val API_PATH = "api/v2/getFursuitByID"
     }
 }
