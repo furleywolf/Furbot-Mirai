@@ -49,7 +49,12 @@ public final class JavaPluginMain extends JavaPlugin {
             config = new Config();
             getLogger().info("模板配置文件已生成，请在/config/cn.transfur.furbot/config.yml中编辑配置文件。");
         }
-        getLogger().info("Plugin init success. Bot id : " + config.getFurbot().getQq());
+        if(config.getFurbot().getQq() == null || config.getFurbot().getQq().equalsIgnoreCase("0")){
+            getLogger().warning("未配置API接口，请在/config/cn.transfur.furbot/config.yml中编辑配置文件后重启Mirai-Console");
+
+        }else {
+            getLogger().info("Plugin init success. Bot id : " + config.getFurbot().getQq());
+        }
     }
 
     @Override
