@@ -11,7 +11,7 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 object KotlinPluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "cn.transfur.furbot",
-        version = "0.1.1",
+        version = "0.1.2",
         name = "Furbot"
     ) {
         author("Jmeow, Peanuuutz")
