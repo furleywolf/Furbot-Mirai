@@ -19,14 +19,14 @@ value class GetFurIdStrategy(private val name: String) : Strategy {
     override suspend fun respond(target: User) {
         val furId = getFurId()
 
-        if (furId.ids.isEmpty()) {
-            target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")
-        } else {
-            val actualTarget = if (target is Member) target.group else target
+        val actualTarget = if (target is Member) target.group else target
 
-            val message = buildMessageChain(2) {
+        if (furId.ids.isEmpty()) {
+            actualTarget.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")
+        } else {
+            val message = buildMessageChain(1) {
                 // Result text
-                add("搜索结果：${furId.ids.joinToString(separator = "、")}")
+                add("搜索结果：${furId.ids.joinToString(separator = "、")}\n")
 
                 // Tail
                 addTail()
