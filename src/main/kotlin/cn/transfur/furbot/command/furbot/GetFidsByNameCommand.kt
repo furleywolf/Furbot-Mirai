@@ -29,12 +29,20 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
         when (this) {
             is FriendCommandSenderOnMessage -> {
                 if (Config.furbot.respondFriends)
-                    respond(user, name)
+                    differRespond(user, name)
             }
             is MemberCommandSenderOnMessage -> {
                 if (Config.furbot.respondGroups)
-                    respond(group, name)
+                    differRespond(group, name)
             }
+        }
+    }
+
+    private suspend fun differRespond(target: Contact, name: String) {
+        if (name != "绒狸") {
+            respond(target, name)
+        } else {
+            respondEaster(target)
         }
     }
 
@@ -54,5 +62,17 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
 
             target.sendMessage(message)
         }
+    }
+
+    private suspend fun respondEaster(target: Contact) {
+        val message = buildMessageChain(1) {
+            // Result text
+            add("搜紡绑枙：Access Denied\n")
+
+            // Tail
+            addTail("--- root@FurryAir ---")
+        }
+
+        target.sendMessage(message)
     }
 }
