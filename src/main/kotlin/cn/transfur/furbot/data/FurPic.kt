@@ -1,10 +1,12 @@
 package cn.transfur.furbot.data
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class FurPic(
-    val id: Int,
+    @SerialName("id")
+    val fid: Int,
     val name: String,
     val url: String
 )

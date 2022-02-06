@@ -1,4 +1,4 @@
-import cn.transfur.furbot.data.FurId
+import cn.transfur.furbot.data.Fids
 import cn.transfur.furbot.util.buildSignString
 import cn.transfur.furbot.data.TailApiServerResponse
 import io.ktor.client.HttpClient
@@ -22,6 +22,6 @@ suspend fun main() {
             parameter("name", "花生")
         }
     }
-    val serializer = TailApiServerResponse.serializer(FurId.serializer())
+    val serializer = TailApiServerResponse.serializer(Fids.serializer())
     println(json.decodeFromString(serializer, response))
 }

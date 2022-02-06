@@ -1,12 +1,11 @@
-package cn.transfur.furbot.command.strategy
+package cn.transfur.furbot.command
 
 import cn.transfur.furbot.Config
-import net.mamoe.mirai.contact.User
+import cn.transfur.furbot.KotlinPluginMain
+import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.message.data.MessageChainBuilder
 
-interface Strategy {
-    suspend fun respond(target: User)
-
+abstract class FurbotSimpleCommand(primaryName: String) : SimpleCommand(KotlinPluginMain, primaryName) {
     fun MessageChainBuilder.addTail(tail: String = "--- 绒狸开源版 ---") {
         if (Config.furbot.showTail)
             add(tail)

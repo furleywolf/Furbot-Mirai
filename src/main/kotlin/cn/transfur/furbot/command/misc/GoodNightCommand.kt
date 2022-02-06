@@ -1,21 +1,54 @@
-package cn.transfur.furbot.command.strategy
+package cn.transfur.furbot.command.misc
 
 import cn.transfur.furbot.Config
-import cn.transfur.furbot.KotlinPluginMain
+import cn.transfur.furbot.command.FurbotSimpleCommand
+import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.contact.Member
-import net.mamoe.mirai.contact.MemberPermission
-import net.mamoe.mirai.contact.User
+import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.buildMessageChain
-import net.mamoe.mirai.utils.error
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
-object GoodNightStrategy : Strategy {
-    override suspend fun respond(target: User) {
-        if (target !is Member) return
+object GoodNightCommand : FurbotSimpleCommand("晚安") {
+    override val description: String = "Mute self if is normal member, or mute a certain member if is op"
 
+    @Handler
+    suspend fun MemberCommandSenderOnMessage.run() {
+        if (user.isOperator()) {
+            val message = buildMessageChain(2) {
+                // Ping
+                add(At(user))
+
+                // Info
+                add("不可以晚安哦")
+            }
+
+            group.sendMessage(message)
+        } else {
+            execute(user)
+        }
+    }
+
+    @Handler
+    suspend fun MemberCommandSenderOnMessage.run(ping: At) {
+        if (!user.isOperator() || group[ping.target]!!.isOperator()) {
+            val message = buildMessageChain(2) {
+                // Ping
+                add(At(user))
+
+                // Info
+                add("你不可以向 ${ping.getDisplay(group)} 说晚安哦")
+            }
+
+            group.sendMessage(message)
+        } else {
+            execute(group[ping.target]!!)
+        }
+    }
+
+    private suspend fun execute(target: Member) {
         val startTime = LocalTime.parse(Config.goodNight.startTime)
         val endTime = LocalTime.parse(Config.goodNight.endTime)
 
@@ -25,11 +58,6 @@ object GoodNightStrategy : Strategy {
         val beforeDawn = currentDateTime.toLocalTime() <= endTime
 
         if (atNight || beforeDawn) {
-            if (target.group.botPermission < MemberPermission.ADMINISTRATOR) {
-                KotlinPluginMain.logger.error { "Bot ${target.bot.id} is not op in group ${target.group.id}" }
-                return
-            }
-
             // Message to sent
             val message = buildMessageChain(2) {
                 // Ping
