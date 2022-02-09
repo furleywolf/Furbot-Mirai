@@ -9,11 +9,13 @@ import net.mamoe.mirai.message.data.PlainText;
 import net.mamoe.mirai.message.data.SingleMessage;
 import net.mamoe.mirai.utils.ExternalResource;
 
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.transfur.furbot.base.Config;
 import cn.transfur.furbot.JavaPluginMain;
+import cn.transfur.furbot.base.Config;
+import cn.transfur.furbot.model.FurId;
 import cn.transfur.furbot.model.FurryPic;
 import cn.transfur.furbot.net.FurbotApi;
 import cn.transfur.furbot.net.HttpUtils;
@@ -29,6 +31,7 @@ public class BotParser {
     private static final String T_RAND_FURSUIT = "来只毛";
     private static final String T_GET_FURSUIT_BY_NAME = "来只\\s*(.*)";
     private static final String T_GET_FURSUIT_BY_ID = "找毛图\\s*(.*)";
+    private static final String T_GET_FURSUIT_FID = "查fid\\s*(.*)";
     private static final String STR_TAIL = "---By绒狸-开源版---";
 
     private static final Config config = JavaPluginMain.INSTANCE.getConfig();
@@ -72,6 +75,13 @@ public class BotParser {
         String fursuitById = easyRegexp(msg, T_GET_FURSUIT_BY_ID);
         if (fursuitById != null) {
             getFursuitById(sender, fursuitById, response);
+            return;
+        }
+
+        //查fid <FID>
+        String fursuitName = easyRegexp(msg, T_GET_FURSUIT_FID);
+        if (fursuitName != null) {
+            getFursuitFid(fursuitName, response);
             return;
         }
     }
@@ -201,6 +211,50 @@ public class BotParser {
                         "毛毛名字:" + furryPic.getName() + " \n" +
                         "搜索方法: 按FurID查找")
                 .append(sender.uploadImage(ExternalResource.create(bytes)));
+
+        appendTail(builder);
+
+        MessageChain build = builder.build();
+
+        response.onResponse(build);
+    }
+
+    /**
+     * 查FID，根据名称查询FID
+     *
+     * @param fursuitName fursuit名称
+     * @param response    响应回调
+     */
+    private static void getFursuitFid(String fursuitName, BotResponse response) {
+        FurId fursuitFid = FurbotApi.getFursuitFid(
+                config.getFurbot().getQq(), config.getFurbot().getAuthKey(), fursuitName);
+
+        if (fursuitFid == null) {
+            response.onError("API接口获取失败");
+            return;
+        }
+
+        if (fursuitFid.getName() == null
+                || fursuitFid.getFids() == null
+                || fursuitFid.getFids().size() == 0) {
+            MessageChainBuilder builder = new MessageChainBuilder()
+                    .append("这只毛毛还没有被收录，请联系开发者添加哦~");
+
+            response.onResponse(builder.build());
+            return;
+        }
+
+        MessageChainBuilder builder = new MessageChainBuilder().append("搜索结果：");
+
+        Iterator<Integer> iterator = fursuitFid.getFids().iterator();
+
+        while (iterator.hasNext()) {
+            builder.append(String.valueOf(iterator.next()));
+
+            if (iterator.hasNext()) {
+                builder.append("、");
+            }
+        }
 
         appendTail(builder);
 

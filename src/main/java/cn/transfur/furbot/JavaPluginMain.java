@@ -34,7 +34,7 @@ public final class JavaPluginMain extends JavaPlugin {
     private Config config = null;
 
     private JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("cn.transfur.furbot", "0.1.1")
+        super(new JvmPluginDescriptionBuilder("cn.transfur.furbot", "0.1.2")
                 .name("FurBot")
                 .author("Jmeow")
                 .info("furbot-mirai")

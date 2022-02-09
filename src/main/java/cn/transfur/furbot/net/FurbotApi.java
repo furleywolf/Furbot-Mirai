@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.transfur.furbot.base.Common;
+import cn.transfur.furbot.model.FurId;
 import cn.transfur.furbot.model.FurryPic;
 import cn.transfur.furbot.model.ServerResponse;
 import cn.transfur.furbot.util.SignUtil;
@@ -60,6 +61,37 @@ public class FurbotApi {
     }
 
     /**
+     * 根据名称查询对应的Fid信息
+     *
+     * @param qq   botQQ号
+     * @param key  鉴权Key
+     * @param name 名称
+     * @return FursuitPic
+     */
+    public static FurId getFursuitFid(String qq, String key, String name) {
+        Map<String, String> extra = new HashMap<>();
+        extra.put("name", name);
+        Map<String, String> query = buildSignQuery(qq, key, Common.API_GET_FURSUIT_FID, extra);
+
+        Response rspRaw = HttpUtils.doGet(
+                Common.API_HOST, Common.API_GET_FURSUIT_FID, null, query);
+
+        try {
+            if (rspRaw != null && rspRaw.body() != null) {
+                String json = rspRaw.body().string();
+                ServerResponse<FurId> rspData = new Gson().fromJson(json,
+                        new TypeToken<ServerResponse<FurId>>() {
+                        }.getType());
+                return rspData.getData();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
      * 通用获取图片信息
      *
      * @param qq  botQQ号
@@ -68,15 +100,7 @@ public class FurbotApi {
      * @return FursuitPic
      */
     private static FurryPic getFursuitBasic(String qq, String key, String api, Map<String, String> extraQuery) {
-        String timestamp = SignUtil.getTimestamp();
-        Map<String, String> query = new HashMap<>();
-        query.put("qq", qq);
-        query.put("timestamp", timestamp);
-        query.put("sign", SignUtil.buildSignString(api, timestamp, key));
-
-        if (extraQuery != null) {
-            query.putAll(extraQuery);
-        }
+        Map<String, String> query = buildSignQuery(qq, key, api, extraQuery);
 
         Response rspRaw = HttpUtils.doGet(
                 Common.API_HOST, api, null, query);
@@ -94,5 +118,28 @@ public class FurbotApi {
         }
 
         return null;
+    }
+
+    /**
+     * 构建带签名的查询
+     *
+     * @param qq         botQQ号
+     * @param key        鉴权Key
+     * @param api        接口
+     * @param extraQuery 额外参数
+     * @return queryMap
+     */
+    private static Map<String, String> buildSignQuery(String qq, String key, String api,
+                                                      Map<String, String> extraQuery) {
+        String timestamp = SignUtil.getTimestamp();
+        Map<String, String> query = new HashMap<>();
+        query.put("qq", qq);
+        query.put("timestamp", timestamp);
+        query.put("sign", SignUtil.buildSignString(api, timestamp, key));
+
+        if (extraQuery != null) {
+            query.putAll(extraQuery);
+        }
+        return query;
     }
 }
