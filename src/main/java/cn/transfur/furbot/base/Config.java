@@ -28,9 +28,9 @@ public class Config {
 
         private boolean showTail;
 
-        private boolean responseFriend;
+        private boolean respondFriends;
 
-        private boolean responseGroup;
+        private boolean respondGroups;
 
         public String getQq() {
             return qq;
@@ -48,20 +48,20 @@ public class Config {
             this.authKey = authKey;
         }
 
-        public boolean isResponseFriend() {
-            return responseFriend;
+        public boolean isRespondFriends() {
+            return respondFriends;
         }
 
-        public void setResponseFriend(boolean responseFriend) {
-            this.responseFriend = responseFriend;
+        public void setRespondFriends(boolean respondFriends) {
+            this.respondFriends = respondFriends;
         }
 
-        public boolean isResponseGroup() {
-            return responseGroup;
+        public boolean isRespondGroups() {
+            return respondGroups;
         }
 
-        public void setResponseGroup(boolean responseGroup) {
-            this.responseGroup = responseGroup;
+        public void setRespondGroups(boolean respondGroups) {
+            this.respondGroups = respondGroups;
         }
 
         public boolean isShowTail() {

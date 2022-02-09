@@ -8,8 +8,8 @@ public class MD5Util {
 
     private static String byteArrayToHexString(byte b[]) {
         StringBuffer resultSb = new StringBuffer();
-        for (int i = 0; i < b.length; i++)
-            resultSb.append(byteToHexString(b[i]));
+        for (byte value : b)
+            resultSb.append(byteToHexString(value));
 
         return resultSb.toString();
     }
@@ -24,22 +24,19 @@ public class MD5Util {
     }
 
     /**
-     * 返回大写MD5
-     *
-     * @param origin
-     * @param charsetname
-     * @return
+     * @param origin 原始字符串
+     * @param charsetName 字符集
+     * @return 大写MD5
      */
-    private static String MD5Encode(String origin, String charsetname) {
-        String resultString = null;
+    private static String MD5Encode(String origin, String charsetName) {
+        String resultString = origin;
         try {
-            resultString = new String(origin);
             MessageDigest md = MessageDigest.getInstance("MD5");
-            if (charsetname == null || "".equals(charsetname))
+            if (charsetName == null || "".equals(charsetName))
                 resultString = byteArrayToHexString(md.digest(resultString.getBytes()));
             else
-                resultString = byteArrayToHexString(md.digest(resultString.getBytes(charsetname)));
-        } catch (Exception exception) {
+                resultString = byteArrayToHexString(md.digest(resultString.getBytes(charsetName)));
+        } catch (Exception ignored) {
         }
         return resultString.toUpperCase();
     }

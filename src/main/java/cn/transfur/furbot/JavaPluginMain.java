@@ -62,7 +62,7 @@ public final class JavaPluginMain extends JavaPlugin {
         EventChannel<Event> eventChannel = GlobalEventChannel.INSTANCE.parentScope(this);
         //监听群消息
         eventChannel.subscribeAlways(GroupMessageEvent.class, g -> {
-            if (!config.getFurbot().isResponseGroup()) {
+            if (!config.getFurbot().isRespondGroups()) {
                 return;
             }
             //解析并响应消息
@@ -80,7 +80,7 @@ public final class JavaPluginMain extends JavaPlugin {
         });
         //监听好友消息
         eventChannel.subscribeAlways(FriendMessageEvent.class, f -> {
-            if (!config.getFurbot().isResponseFriend()) {
+            if (!config.getFurbot().isRespondFriends()) {
                 return;
             }
             //解析并响应消息
