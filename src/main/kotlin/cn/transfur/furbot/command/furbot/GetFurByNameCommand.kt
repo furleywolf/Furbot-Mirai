@@ -71,7 +71,7 @@ object GetFurByNameCommand : GetFurCommand("来只") {
             """.trimIndent())
 
             // Il_da
-            addImage(target, "https://q1.qlogo.cn/g?b=qq&nk=2934535422$&s=640")
+            addImage(target, "https://cdn.furryfan.cn/bot/avatar.png")
 
             // T`gi
             addTail("--- root@FurryAir ---")
