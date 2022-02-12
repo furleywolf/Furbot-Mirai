@@ -27,6 +27,7 @@
 #### 配置相关
 
 ```yaml
+# 与吸毛模块相关的配置
 furbot:
   # 申请开源版地址的 QQ 号码
   qq: 0
@@ -38,6 +39,12 @@ furbot:
   respondFriends: false
   # 是否响应群聊消息（默认开启）
   respondGroups: true
+# .晚安相关配置
+goodNight:
+  # 最早睡觉时间，以 hh:MM:ss 的形式表示，24 小时制
+  startTime: '20:00:00'
+  # 最晚睡觉时间，以 hh:MM:ss 的形式表示，24 小时制
+  endTime: '07:00:00'
 ```
 
 ### 申请接口

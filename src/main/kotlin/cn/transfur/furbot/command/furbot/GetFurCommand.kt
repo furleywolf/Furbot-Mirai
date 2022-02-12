@@ -8,7 +8,7 @@ import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 
 abstract class GetFurCommand(primaryName: String) : FurbotSimpleCommand(primaryName), ImageAwareCommand {
-    suspend fun getFurPicSimple(
+    protected suspend fun getFurPicSimple(
         apiPath: String,
         vararg extraParameters: Pair<String, Any?>
     ): FurPic? = TailApiClient.getFromTailApi(FurPic.serializer(), apiPath, *extraParameters)

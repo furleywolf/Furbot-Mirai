@@ -1,6 +1,7 @@
 package cn.transfur.furbot.command.furbot
 
 import cn.transfur.furbot.Config
+import cn.transfur.furbot.data.FurPic
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.console.command.FriendCommandSenderOnMessage
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
@@ -11,6 +12,10 @@ object GetFurRandCommand : GetFurCommand("来只毛") {
     private const val API_PATH: String = "api/v2/getFursuitRand"
 
     override val description: String = "Get random fursuit from Tail API"
+
+    suspend fun getFurRand(): FurPic? {
+        return getFurPicSimple(API_PATH)
+    }
 
     @Handler
     suspend fun CommandSenderOnMessage<*>.run() {
@@ -27,7 +32,7 @@ object GetFurRandCommand : GetFurCommand("来只毛") {
     }
 
     private suspend fun respond(target: Contact) {
-        val furPic = getFurPicSimple(API_PATH) ?: return // Swallow here
+        val furPic = getFurRand() ?: return // Swallow here
 
         val message = buildMessageChain(3) {
             // Result text
