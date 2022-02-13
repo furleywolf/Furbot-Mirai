@@ -13,18 +13,12 @@ repositories {
 }
 
 dependencies {
-    // Gson
-    implementation("com.google.code.gson:gson:2.8.9")
-    // SnakeYaml
-    implementation("org.yaml:snakeyaml:1.30")
     // yamlkt
     implementation("net.mamoe.yamlkt:yamlkt-jvm:0.10.2")
-    // Okhttp 3
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     val miraiVersion: String by project
-    api("net.mamoe:mirai-console-terminal:$miraiVersion")
-    api("net.mamoe:mirai-core:$miraiVersion")
+    implementation("net.mamoe:mirai-console-terminal:$miraiVersion")
+    implementation("net.mamoe:mirai-core:$miraiVersion")
 }
 
 tasks.withType<KotlinCompile> {

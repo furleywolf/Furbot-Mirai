@@ -27,7 +27,7 @@ object GoodNightCommand : FurbotSimpleCommand("晚安") {
 
             group.sendMessage(message)
         } else {
-            execute(user)
+            execute(user, user)
         }
     }
 
@@ -44,11 +44,11 @@ object GoodNightCommand : FurbotSimpleCommand("晚安") {
 
             group.sendMessage(message)
         } else {
-            execute(group[ping.target]!!)
+            execute(user, group[ping.target]!!)
         }
     }
 
-    private suspend fun execute(target: Member) {
+    private suspend fun execute(executor: Member, target: Member) {
         val startTime = LocalTime.parse(Config.goodNight.startTime)
         val endTime = LocalTime.parse(Config.goodNight.endTime)
 
@@ -79,13 +79,13 @@ object GoodNightCommand : FurbotSimpleCommand("晚安") {
         } else {
             val message = buildMessageChain(2) {
                 // Ping
-                add(At(target))
+                add(At(executor))
 
                 // Info
                 add("太早了，不能晚安")
             }
 
-            target.group.sendMessage(message)
+            executor.group.sendMessage(message)
         }
     }
 }

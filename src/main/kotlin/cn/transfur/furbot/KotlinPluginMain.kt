@@ -1,5 +1,6 @@
 package cn.transfur.furbot
 
+import cn.transfur.furbot.command.admin.FurbotControlCommand
 import cn.transfur.furbot.command.furbot.GetFidsByNameCommand
 import cn.transfur.furbot.command.furbot.GetFurByFidCommand
 import cn.transfur.furbot.command.furbot.GetFurByNameCommand
@@ -8,10 +9,13 @@ import cn.transfur.furbot.command.misc.GoodNightCommand
 import cn.transfur.furbot.network.TailApiClient
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import net.mamoe.mirai.console.command.Command
 import net.mamoe.mirai.console.command.CommandManager
 import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
 import net.mamoe.mirai.console.command.CommandSender.Companion.toCommandSender
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
+import net.mamoe.mirai.console.permission.AbstractPermitteeId
+import net.mamoe.mirai.console.permission.PermissionService.Companion.permit
 import net.mamoe.mirai.console.plugin.PluginManager
 import net.mamoe.mirai.console.plugin.id
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
@@ -32,7 +36,18 @@ object KotlinPluginMain : KotlinPlugin(
         info("furbot-mirai")
     }
 ) {
-    private lateinit var listener: Listener<MessageEvent>
+    private var listener: Listener<MessageEvent>? = null
+
+    val userCommands: Array<Command> = arrayOf(
+        // furbot
+        GetFurByFidCommand,
+        GetFurByNameCommand,
+        GetFurRandCommand,
+        GetFidsByNameCommand,
+
+        // misc
+        GoodNightCommand,
+    )
 
     override fun onEnable() {
         Config.reload()
@@ -45,14 +60,14 @@ object KotlinPluginMain : KotlinPlugin(
     }
 
     private fun registerCommands() {
-        // furbot
-        GetFurByFidCommand.register()
-        GetFurByNameCommand.register()
-        GetFurRandCommand.register()
-        GetFidsByNameCommand.register()
+        with(FurbotControlCommand) {
+            register()
 
-        // misc
-        GoodNightCommand.register()
+            // To enable initial operation: `.furbot on`
+            AbstractPermitteeId.AnyMemberFromAnyGroup.permit(permission)
+        }
+
+        userCommands.forEach { it.register() }
     }
 
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
@@ -74,7 +89,6 @@ object KotlinPluginMain : KotlinPlugin(
     override fun onDisable() {
         TailApiClient.close()
 
-        if (this::listener.isInitialized)
-            listener.complete()
+        listener?.complete()
     }
 }

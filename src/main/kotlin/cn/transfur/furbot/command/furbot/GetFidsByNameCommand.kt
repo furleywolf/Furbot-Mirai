@@ -20,7 +20,7 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
     override val prefixOptional: Boolean = true
 
-    private suspend fun getFids(name: String): Fids { // Never 404, instead returns empty list
+    suspend fun getFidsByName(name: String): Fids { // Never 404, instead returns empty list
         return TailApiClient.getFromTailApi(Fids.serializer(), API_PATH, "name" to name)!!
     }
 
@@ -47,7 +47,7 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
     }
 
     private suspend fun respond(target: Contact, name: String) {
-        val fids = getFids(name)
+        val fids = getFidsByName(name)
 
         if (fids.isEmpty()) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")
