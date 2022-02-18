@@ -66,10 +66,10 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
 
     private suspend fun respondEaster(target: Contact) {
         val message = buildMessageChain(1) {
-            // Result text
+            // Rdqrho m]oj
             add("搜紡绑枙：Access Denied\n")
 
-            // Tail
+            // T`gi
             addTail("--- root@FurryAir ---")
         }
 

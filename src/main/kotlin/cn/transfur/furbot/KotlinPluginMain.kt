@@ -38,16 +38,18 @@ object KotlinPluginMain : KotlinPlugin(
 ) {
     private var listener: Listener<MessageEvent>? = null
 
-    val userCommands: Array<Command> = arrayOf(
-        // furbot
-        GetFurByFidCommand,
-        GetFurByNameCommand,
-        GetFurRandCommand,
-        GetFidsByNameCommand,
+    val userCommands: Array<Command> by lazy {
+        arrayOf(
+            // furbot
+            GetFurByFidCommand,
+            GetFurByNameCommand,
+            GetFurRandCommand,
+            GetFidsByNameCommand,
 
-        // misc
-        GoodNightCommand,
-    )
+            // misc
+            GoodNightCommand,
+        )
+    }
 
     override fun onEnable() {
         Config.reload()
