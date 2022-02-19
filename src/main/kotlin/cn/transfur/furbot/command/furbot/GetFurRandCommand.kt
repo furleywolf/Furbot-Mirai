@@ -1,10 +1,7 @@
 package cn.transfur.furbot.command.furbot
 
-import cn.transfur.furbot.Config
 import cn.transfur.furbot.data.FurPic
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
-import net.mamoe.mirai.console.command.FriendCommandSenderOnMessage
-import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.message.data.buildMessageChain
 
@@ -18,18 +15,7 @@ object GetFurRandCommand : GetFurCommand("来只毛") {
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run() {
-        when (this) {
-            is FriendCommandSenderOnMessage -> {
-                if (Config.furbot.respondFriends)
-                    respond(user)
-            }
-            is MemberCommandSenderOnMessage -> {
-                if (Config.furbot.respondGroups)
-                    respond(group)
-            }
-        }
-    }
+    suspend fun CommandSenderOnMessage<*>.run() = differContact { respond(it) }
 
     private suspend fun respond(target: Contact) {
         val furPic = getFurRand() ?: return // Swallow here

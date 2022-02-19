@@ -1,10 +1,7 @@
 package cn.transfur.furbot.command.furbot
 
-import cn.transfur.furbot.Config
 import cn.transfur.furbot.data.FurPic
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
-import net.mamoe.mirai.console.command.FriendCommandSenderOnMessage
-import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.message.data.buildMessageChain
 
@@ -18,18 +15,7 @@ object GetFurByFidCommand : GetFurCommand("找毛图") {
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run(fid: Int) {
-        when (this) {
-            is FriendCommandSenderOnMessage -> {
-                if (Config.furbot.respondFriends)
-                    respond(user, fid)
-            }
-            is MemberCommandSenderOnMessage -> {
-                if (Config.furbot.respondGroups)
-                    respond(group, fid)
-            }
-        }
-    }
+    suspend fun CommandSenderOnMessage<*>.run(fid: Int) = differContact { respond(it, fid) }
 
     private suspend fun respond(target: Contact, fid: Int) {
         val furPic = getFurByFid(fid)

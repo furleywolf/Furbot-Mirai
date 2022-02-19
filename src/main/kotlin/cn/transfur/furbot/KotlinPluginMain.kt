@@ -6,6 +6,7 @@ import cn.transfur.furbot.command.furbot.GetFurByFidCommand
 import cn.transfur.furbot.command.furbot.GetFurByNameCommand
 import cn.transfur.furbot.command.furbot.GetFurRandCommand
 import cn.transfur.furbot.command.misc.GoodNightCommand
+import cn.transfur.furbot.command.misc.HelpCommand
 import cn.transfur.furbot.network.TailApiClient
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -48,6 +49,7 @@ object KotlinPluginMain : KotlinPlugin(
 
             // misc
             GoodNightCommand,
+            HelpCommand
         )
     }
 

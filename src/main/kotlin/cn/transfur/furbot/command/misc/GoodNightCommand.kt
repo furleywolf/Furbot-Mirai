@@ -16,13 +16,16 @@ object GoodNightCommand : FurbotSimpleCommand("晚安") {
 
     @Handler
     suspend fun MemberCommandSenderOnMessage.run() {
+        if (!Config.furbot.respondGroups)
+            return
+
         if (user.isOperator()) {
             val message = buildMessageChain(2) {
                 // Ping
                 add(At(user))
 
                 // Info
-                add("不可以晚安哦")
+                add(" 不可以晚安哦")
             }
 
             group.sendMessage(message)
@@ -33,18 +36,37 @@ object GoodNightCommand : FurbotSimpleCommand("晚安") {
 
     @Handler
     suspend fun MemberCommandSenderOnMessage.run(ping: At) {
-        if (!user.isOperator() || group[ping.target]!!.isOperator()) {
+        if (!Config.furbot.respondGroups)
+            return
+
+        val target = group[ping.target]
+
+        if (target != null) {
+            if (user.id == target.id) {
+                run()
+            } else if (!user.isOperator() || target.isOperator()) {
+                val message = buildMessageChain(2) {
+                    // Ping
+                    add(At(user))
+
+                    // Info
+                    add(" 你不可以向 ${ping.getDisplay(group)} 说晚安哦")
+                }
+
+                group.sendMessage(message)
+            } else {
+                execute(user, target)
+            }
+        } else {
             val message = buildMessageChain(2) {
                 // Ping
                 add(At(user))
 
                 // Info
-                add("你不可以向 ${ping.getDisplay(group)} 说晚安哦")
+                add(" 在此群中找不到群成员：${ping.getDisplay(group)}")
             }
 
             group.sendMessage(message)
-        } else {
-            execute(user, group[ping.target]!!)
         }
     }
 
@@ -65,7 +87,7 @@ object GoodNightCommand : FurbotSimpleCommand("晚安") {
 
                 // Info
                 val daySpecification = if (atNight) "明天" else "今天"
-                add("禁言到$daySpecification ${Config.goodNight.endTime}，晚安！")
+                add(" 禁言到$daySpecification ${Config.goodNight.endTime}，晚安！")
             }
 
             target.group.sendMessage(message)
@@ -82,7 +104,7 @@ object GoodNightCommand : FurbotSimpleCommand("晚安") {
                 add(At(executor))
 
                 // Info
-                add("太早了，不能晚安")
+                add(" 太早了，不能晚安")
             }
 
             executor.group.sendMessage(message)
