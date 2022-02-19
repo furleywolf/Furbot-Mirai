@@ -1,12 +1,9 @@
 package cn.transfur.furbot.command.furbot
 
-import cn.transfur.furbot.Config
 import cn.transfur.furbot.command.FurbotSimpleCommand
 import cn.transfur.furbot.data.Fids
 import cn.transfur.furbot.network.TailApiClient
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
-import net.mamoe.mirai.console.command.FriendCommandSenderOnMessage
-import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.contact.Contact
@@ -25,18 +22,7 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run(name: String) {
-        when (this) {
-            is FriendCommandSenderOnMessage -> {
-                if (Config.furbot.respondFriends)
-                    differRespond(user, name)
-            }
-            is MemberCommandSenderOnMessage -> {
-                if (Config.furbot.respondGroups)
-                    differRespond(group, name)
-            }
-        }
-    }
+    suspend fun CommandSenderOnMessage<*>.run(name: String) = differContact { differRespond(it, name) }
 
     private suspend fun differRespond(target: Contact, name: String) {
         if (name != "绒狸") {

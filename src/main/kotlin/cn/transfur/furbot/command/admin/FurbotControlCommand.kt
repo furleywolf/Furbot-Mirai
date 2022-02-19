@@ -1,7 +1,8 @@
 package cn.transfur.furbot.command.admin
 
+import cn.transfur.furbot.Config
 import cn.transfur.furbot.KotlinPluginMain
-import cn.transfur.furbot.command.FurbotSimpleCommand
+import cn.transfur.furbot.command.FurbotCompositeCommand
 import net.mamoe.mirai.console.command.Command.Companion.allNames
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.console.permission.AbstractPermitteeId
@@ -10,24 +11,35 @@ import net.mamoe.mirai.console.permission.PermissionService.Companion.permit
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.isOperator
 
-object FurbotControlCommand : FurbotSimpleCommand("furbot") {
+object FurbotControlCommand : FurbotCompositeCommand("furbot") {
     override val description: String = "Control all commands in the furbot scope"
 
-    @Handler
-    suspend fun MemberCommandSenderOnMessage.run(operation: String) {
-        if (user.isOperator())
-            executeAll(group, convertOperation(operation))
+    @SubCommand("on", "开")
+    suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) {
+        if (!Config.furbot.respondGroups)
+            return
+
+        if (user.isOperator()) {
+            if (commandName == null) {
+                executeAll(group, true)
+            } else {
+                executeSingle(group, true, commandName)
+            }
+        }
     }
 
-    @Handler
-    suspend fun MemberCommandSenderOnMessage.run(operation: String, commandName: String) {
-        if (user.isOperator())
-            executeSingle(group, convertOperation(operation), commandName)
-    }
+    @SubCommand("off", "关")
+    suspend fun MemberCommandSenderOnMessage.off(commandName: String? = null) {
+        if (!Config.furbot.respondGroups)
+            return
 
-    private fun convertOperation(operation: String): Boolean = when (operation.lowercase()) {
-        "on", "开" -> true
-        else -> false
+        if (user.isOperator()) {
+            if (commandName == null) {
+                executeAll(group, false)
+            } else {
+                executeSingle(group, false, commandName)
+            }
+        }
     }
 
     private suspend fun executeAll(group: Group, operation: Boolean) {
