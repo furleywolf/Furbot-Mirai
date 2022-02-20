@@ -11,6 +11,9 @@ object HelpCommand : FurbotSimpleCommand("帮助") {
     suspend fun CommandSenderOnMessage<*>.run() = differContact { respond(it) }
 
     private suspend fun respond(target: Contact) {
-        target.sendMessage("命令说明正在撰写")
+        // Note: there are several differences between the original commands
+        // and these in Furbot-Mirai, like session support. For now just use
+        // the original instructions.
+        target.sendMessage("命令说明：https://www.kancloud.cn/furleywolf/furbot/2482928")
     }
 }
