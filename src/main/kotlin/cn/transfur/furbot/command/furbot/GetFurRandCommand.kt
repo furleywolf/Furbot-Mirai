@@ -1,9 +1,9 @@
 package cn.transfur.furbot.command.furbot
 
 import cn.transfur.furbot.data.FurPic
+import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
-import net.mamoe.mirai.message.data.buildMessageChain
 
 object GetFurRandCommand : GetFurCommand("来只毛") {
     private const val API_PATH: String = "api/v2/getFursuitRand"
@@ -20,7 +20,7 @@ object GetFurRandCommand : GetFurCommand("来只毛") {
     private suspend fun respond(target: Contact) {
         val furPic = getFurRand() ?: return // Swallow here
 
-        val message = buildMessageChain(3) {
+        target.sendMessage {
             // Result text
             add("""
                 --- 每日吸毛 Bot ---
@@ -36,7 +36,5 @@ object GetFurRandCommand : GetFurCommand("来只毛") {
             // Tail
             addTail()
         }
-
-        target.sendMessage(message)
     }
 }

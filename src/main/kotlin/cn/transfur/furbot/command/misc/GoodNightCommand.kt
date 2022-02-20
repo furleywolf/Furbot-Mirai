@@ -3,11 +3,11 @@ package cn.transfur.furbot.command.misc
 import cn.transfur.furbot.Config
 import cn.transfur.furbot.command.FurbotSimpleCommand
 import cn.transfur.furbot.command.GroupOnlyCommand
+import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.message.data.At
-import net.mamoe.mirai.message.data.buildMessageChain
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
@@ -21,15 +21,13 @@ object GoodNightCommand : FurbotSimpleCommand("晚安"), GroupOnlyCommand {
             return
 
         if (user.isOperator()) {
-            val message = buildMessageChain(2) {
+            group.sendMessage {
                 // Ping
                 add(At(user))
 
                 // Info
                 add(" 不可以晚安哦")
             }
-
-            group.sendMessage(message)
         } else {
             execute(user, user)
         }
@@ -46,28 +44,24 @@ object GoodNightCommand : FurbotSimpleCommand("晚安"), GroupOnlyCommand {
             if (user.id == target.id) {
                 run()
             } else if (!user.isOperator() || target.isOperator()) {
-                val message = buildMessageChain(2) {
+                group.sendMessage {
                     // Ping
                     add(At(user))
 
                     // Info
                     add(" 你不可以向 ${ping.getDisplay(group)} 说晚安哦")
                 }
-
-                group.sendMessage(message)
             } else {
                 execute(user, target)
             }
         } else {
-            val message = buildMessageChain(2) {
+            group.sendMessage {
                 // Ping
                 add(At(user))
 
                 // Info
                 add(" 在此群中找不到群成员：${ping.getDisplay(group)}")
             }
-
-            group.sendMessage(message)
         }
     }
 
@@ -82,7 +76,7 @@ object GoodNightCommand : FurbotSimpleCommand("晚安"), GroupOnlyCommand {
 
         if (atNight || beforeDawn) {
             // Message to sent
-            val message = buildMessageChain(2) {
+            target.group.sendMessage {
                 // Ping
                 add(At(target))
 
@@ -91,8 +85,6 @@ object GoodNightCommand : FurbotSimpleCommand("晚安"), GroupOnlyCommand {
                 add(" 禁言到$daySpecification ${Config.goodNight.endTime}，晚安！")
             }
 
-            target.group.sendMessage(message)
-
             // Mute duration to apply
             val endDate = currentDateTime.toLocalDate().let { if (atNight) it.plusDays(1) else it }
             val endDateTime = LocalDateTime.of(endDate, endTime)
@@ -100,15 +92,13 @@ object GoodNightCommand : FurbotSimpleCommand("晚安"), GroupOnlyCommand {
 
             target.mute(muteDuration.toInt())
         } else {
-            val message = buildMessageChain(2) {
+            executor.group.sendMessage {
                 // Ping
                 add(At(executor))
 
                 // Info
                 add(" 太早了，不能晚安")
             }
-
-            executor.group.sendMessage(message)
         }
     }
 }

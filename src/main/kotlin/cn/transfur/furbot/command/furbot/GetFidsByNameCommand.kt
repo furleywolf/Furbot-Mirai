@@ -1,15 +1,16 @@
 package cn.transfur.furbot.command.furbot
 
 import cn.transfur.furbot.command.FurbotSimpleCommand
+import cn.transfur.furbot.command.SessionCommand
 import cn.transfur.furbot.data.Fids
 import cn.transfur.furbot.network.TailApiClient
+import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.contact.Contact
-import net.mamoe.mirai.message.data.buildMessageChain
 
-object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
+object GetFidsByNameCommand : FurbotSimpleCommand("查fid"), SessionCommand {
     private const val API_PATH: String = "api/v2/getFursuitFid"
 
     override val description: String = "Get fids based on name from Tail API"
@@ -19,6 +20,12 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
 
     suspend fun getFidsByName(name: String): Fids { // Never 404, instead returns empty list
         return TailApiClient.getFromTailApi(Fids.serializer(), API_PATH, "name" to name)!!
+    }
+
+    @Handler
+    suspend fun CommandSenderOnMessage<*>.run() = differContact { target ->
+        val name = fromEvent.sender.ask("你想查哪只毛毛？") ?: return@differContact
+        differRespond(target, name)
     }
 
     @Handler
@@ -38,27 +45,23 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid") {
         if (fids.isEmpty()) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")
         } else {
-            val message = buildMessageChain(1) {
+            target.sendMessage {
                 // Result text
                 add("搜索结果：${fids.joinToString(separator = "、")}\n")
 
                 // Tail
                 addTail()
             }
-
-            target.sendMessage(message)
         }
     }
 
     private suspend fun respondEaster(target: Contact) {
-        val message = buildMessageChain(1) {
+        target.sendMessage {
             // Rdqrho m]oj
             add("搜紡绑枙：Access Denied\n")
 
             // T`gi
             addTail("--- root@FurryAir ---")
         }
-
-        target.sendMessage(message)
     }
 }

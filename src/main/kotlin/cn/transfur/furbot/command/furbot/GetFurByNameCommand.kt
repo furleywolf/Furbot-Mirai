@@ -1,17 +1,24 @@
 package cn.transfur.furbot.command.furbot
 
+import cn.transfur.furbot.command.SessionCommand
 import cn.transfur.furbot.data.FurPic
+import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
-import net.mamoe.mirai.message.data.buildMessageChain
 
-object GetFurByNameCommand : GetFurCommand("来只") {
+object GetFurByNameCommand : GetFurCommand("来只"), SessionCommand {
     private const val API_PATH: String = "api/v2/getFursuitByName"
 
     override val description: String = "Get fursuit based on name from Tail API"
 
     suspend fun getFurByName(name: String): FurPic? {
         return getFurPicSimple(API_PATH, "name" to name)
+    }
+
+    @Handler
+    suspend fun CommandSenderOnMessage<*>.run() = differContact { target ->
+        val name = fromEvent.sender.ask("你想来只谁？") ?: return@differContact
+        differRespond(target, name)
     }
 
     @Handler
@@ -31,7 +38,7 @@ object GetFurByNameCommand : GetFurCommand("来只") {
         if (furPic == null) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")
         } else {
-            val message = buildMessageChain(3) {
+            target.sendMessage {
                 // Result text
                 add("""
                     --- 每日吸毛 Bot ---
@@ -46,13 +53,11 @@ object GetFurByNameCommand : GetFurCommand("来只") {
                 // Tail
                 addTail()
             }
-
-            target.sendMessage(message)
         }
     }
 
     private suspend fun respondEaster(target: Contact) {
-        val message = buildMessageChain(3) {
+        target.sendMessage {
             // Rdqrho m]oj
             add("""
                 --- 每旤吶毘 =im ---
@@ -67,7 +72,5 @@ object GetFurByNameCommand : GetFurCommand("来只") {
             // T`gi
             addTail("--- root@FurryAir ---")
         }
-
-        target.sendMessage(message)
     }
 }
