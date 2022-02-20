@@ -16,29 +16,25 @@ object FurbotControlCommand : FurbotCompositeCommand("furbot") {
 
     @SubCommand("on", "开")
     suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) {
-        if (!Config.furbot.respondGroups)
+        if (!Config.furbot.respondGroups || !user.isOperator())
             return
 
-        if (user.isOperator()) {
-            if (commandName == null) {
-                executeAll(group, true)
-            } else {
-                executeSingle(group, true, commandName)
-            }
+        if (commandName == null) {
+            executeAll(group, true)
+        } else {
+            executeSingle(group, true, commandName)
         }
     }
 
     @SubCommand("off", "关")
     suspend fun MemberCommandSenderOnMessage.off(commandName: String? = null) {
-        if (!Config.furbot.respondGroups)
+        if (!Config.furbot.respondGroups || !user.isOperator())
             return
 
-        if (user.isOperator()) {
-            if (commandName == null) {
-                executeAll(group, false)
-            } else {
-                executeSingle(group, false, commandName)
-            }
+        if (commandName == null) {
+            executeAll(group, false)
+        } else {
+            executeSingle(group, false, commandName)
         }
     }
 

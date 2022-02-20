@@ -21,7 +21,7 @@ interface FurbotCommand : Command {
 abstract class FurbotSimpleCommand(
     primaryName: String
 ) : SimpleCommand(KotlinPluginMain, primaryName), FurbotCommand {
-    inline fun CommandSenderOnMessage<*>.differContact(action: (Contact) -> Unit) {
+    protected inline fun CommandSenderOnMessage<*>.differContact(action: (Contact) -> Unit) {
         when (this) {
             is MemberCommandSenderOnMessage -> {
                 if (Config.furbot.respondGroups)
@@ -38,7 +38,7 @@ abstract class FurbotSimpleCommand(
 abstract class FurbotCompositeCommand(
     primaryName: String
 ) : CompositeCommand(KotlinPluginMain, primaryName), FurbotCommand {
-    inline fun CommandSenderOnMessage<*>.differContact(action: (Contact) -> Unit) {
+    protected inline fun CommandSenderOnMessage<*>.differContact(action: (Contact) -> Unit) {
         when (this) {
             is MemberCommandSenderOnMessage -> {
                 if (Config.furbot.respondGroups)
