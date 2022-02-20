@@ -2,6 +2,7 @@ package cn.transfur.furbot.command.misc
 
 import cn.transfur.furbot.Config
 import cn.transfur.furbot.command.FurbotSimpleCommand
+import cn.transfur.furbot.command.GroupOnlyCommand
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.isOperator
@@ -11,7 +12,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
-object GoodNightCommand : FurbotSimpleCommand("晚安") {
+object GoodNightCommand : FurbotSimpleCommand("晚安"), GroupOnlyCommand {
     override val description: String = "Mute self if is normal member, or mute a certain member if is op"
 
     @Handler
