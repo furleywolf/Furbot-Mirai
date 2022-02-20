@@ -1,5 +1,6 @@
 package cn.transfur.furbot
 
+import cn.transfur.furbot.command.GroupOnlyCommand
 import cn.transfur.furbot.command.admin.FurbotControlCommand
 import cn.transfur.furbot.command.furbot.GetFidsByNameCommand
 import cn.transfur.furbot.command.furbot.GetFurByFidCommand
@@ -71,7 +72,12 @@ object KotlinPluginMain : KotlinPlugin(
             AbstractPermitteeId.AnyMemberFromAnyGroup.permit(permission)
         }
 
-        userCommands.forEach { it.register() }
+        userCommands.forEach { command ->
+            command.register()
+
+            if (command !is GroupOnlyCommand)
+                AbstractPermitteeId.AnyFriend.permit(command.permission)
+        }
     }
 
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)

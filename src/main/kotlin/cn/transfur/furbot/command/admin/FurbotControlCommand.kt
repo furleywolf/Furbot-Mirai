@@ -3,6 +3,7 @@ package cn.transfur.furbot.command.admin
 import cn.transfur.furbot.Config
 import cn.transfur.furbot.KotlinPluginMain
 import cn.transfur.furbot.command.FurbotCompositeCommand
+import cn.transfur.furbot.command.GroupOnlyCommand
 import net.mamoe.mirai.console.command.Command.Companion.allNames
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.console.permission.AbstractPermitteeId
@@ -11,7 +12,7 @@ import net.mamoe.mirai.console.permission.PermissionService.Companion.permit
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.isOperator
 
-object FurbotControlCommand : FurbotCompositeCommand("furbot") {
+object FurbotControlCommand : FurbotCompositeCommand("furbot"), GroupOnlyCommand {
     override val description: String = "Control all commands in the furbot scope"
 
     @SubCommand("on", "开")

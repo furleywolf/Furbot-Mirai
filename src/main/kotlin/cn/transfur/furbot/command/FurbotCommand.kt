@@ -18,6 +18,8 @@ interface FurbotCommand : Command {
     }
 }
 
+interface GroupOnlyCommand : FurbotCommand
+
 abstract class FurbotSimpleCommand(
     primaryName: String
 ) : SimpleCommand(KotlinPluginMain, primaryName), FurbotCommand {
