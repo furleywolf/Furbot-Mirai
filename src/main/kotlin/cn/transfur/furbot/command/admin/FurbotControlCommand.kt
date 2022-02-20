@@ -19,9 +19,10 @@ object FurbotControlCommand : FurbotCompositeCommand("furbot"), GroupOnlyCommand
     suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) {
         if (!Config.furbot.respondGroups)
             return
-        // 权限不足返回一条信息
+        
+        // Warn if is not operator
         if (!user.isOperator()) {
-            group.sendMessage("权限不足 请联系当前机器人管理员进行操作")
+            group.sendMessage("权限不足，只有本群管理员才能使用此命令")
             return
         }
 
@@ -36,9 +37,10 @@ object FurbotControlCommand : FurbotCompositeCommand("furbot"), GroupOnlyCommand
     suspend fun MemberCommandSenderOnMessage.off(commandName: String? = null) {
         if (!Config.furbot.respondGroups)
             return
-        // 权限不足返回一条信息
+        
+        // Warn if is not operator
         if (!user.isOperator()) {
-            group.sendMessage("权限不足 请联系当前机器人管理员进行操作")
+            group.sendMessage("权限不足，只有本群管理员才能使用此命令")
             return
         }
 
