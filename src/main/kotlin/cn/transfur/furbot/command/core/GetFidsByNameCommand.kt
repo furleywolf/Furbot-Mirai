@@ -1,4 +1,4 @@
-package cn.transfur.furbot.command.furbot
+package cn.transfur.furbot.command.core
 
 import cn.transfur.furbot.command.FurbotSimpleCommand
 import cn.transfur.furbot.command.SessionCommand
