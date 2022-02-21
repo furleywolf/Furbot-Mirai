@@ -3,6 +3,7 @@ package cn.transfur.furbot.command
 import cn.transfur.furbot.Config
 import cn.transfur.furbot.network.TailApiClient
 import cn.transfur.furbot.util.sendMessage
+import cn.transfur.furbot.util.sendMessageDifferently
 import net.mamoe.mirai.console.command.Command
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.contact.Friend
@@ -27,8 +28,10 @@ interface SessionCommand : Command {
     /**
      * 以 [指定问题][question] 询问 [该用户][this]，期望获得文本回复.
      */
-    suspend fun User.ask(question: String, timeout: Int = 30): String? {
-        val answer = askImpl<PlainText>(question, timeout)
+    suspend fun User.ask(question: String?, timeout: Int = 30): String? {
+        if (question != null)
+            sendMessageDifferently(question)
+        val answer = listen<PlainText>(timeout)
         return answer?.content
     }
 
@@ -36,47 +39,33 @@ interface SessionCommand : Command {
      * 询问 [该用户][this]，期望获得图片 URL.
      */
     suspend fun User.askForImage(timeout: Int = 30): String? {
-        val answer = askImpl<Image>("请发送一张图片", timeout)
+        sendMessageDifferently("请发送一张图片")
+        val answer = listen<Image>(timeout)
         return answer?.queryUrl()
     }
 
-    private suspend inline fun <reified R : SingleMessage> User.askImpl(
-        question: String,
+    private suspend inline fun <reified R : SingleMessage> User.listen(
         timeout: Int = 30
     ): R? = when (this) {
-        is Member -> {
-            group.sendMessage {
-                // Ping
-                add(At(this@askImpl))
+        is Member -> listenImpl<GroupMessageEvent, R>(timeout).also { answer ->
+            if (answer == null) {
+                group.sendMessage {
+                    // Ping
+                    add(At(this@listen))
 
-                // Question
-                add(" $question")
-            }
-
-            this.listen<GroupMessageEvent, R>(timeout).also { answer ->
-                if (answer == null) {
-                    group.sendMessage {
-                        // Ping
-                        add(At(this@askImpl))
-
-                        // Question
-                        add(" 回复太慢啦，我只听 $timeout 秒")
-                    }
+                    // Question
+                    add(" 回复太慢啦，我只听 $timeout 秒")
                 }
             }
         }
-        is Friend -> {
-            sendMessage(question)
-
-            this.listen<FriendMessageEvent, R>(timeout).also { answer ->
-                if (answer == null)
-                    sendMessage("回复太慢啦，我只听 $timeout 秒")
-            }
+        is Friend -> listenImpl<FriendMessageEvent, R>(timeout).also { answer ->
+            if (answer == null)
+                sendMessage("回复太慢啦，我只听 $timeout 秒")
         }
         else -> error("Unsupported operation from Temp $id")
     }
 
-    private suspend inline fun <reified E : MessageEvent, reified R : SingleMessage> User.listen(
+    private suspend inline fun <reified E : MessageEvent, reified R : SingleMessage> User.listenImpl(
         timeout: Int = 30
     ): R? = nextEventOrNull<E>(1000L * timeout) { event ->
         event.sender.id == this.id && event.message.firstIsInstanceOrNull<R>() != null

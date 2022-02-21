@@ -3,11 +3,9 @@ package cn.transfur.furbot.command.furbot
 import cn.transfur.furbot.command.SessionCommand
 import cn.transfur.furbot.data.FurPic
 import cn.transfur.furbot.util.sendMessage
+import cn.transfur.furbot.util.sendMessageDifferently
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
-import net.mamoe.mirai.contact.Friend
-import net.mamoe.mirai.contact.Member
-import net.mamoe.mirai.message.data.At
 
 object GetFurByFidCommand : GetFurCommand("找毛图"), SessionCommand {
     private const val API_PATH: String = "api/v2/getFursuitByID"
@@ -25,18 +23,7 @@ object GetFurByFidCommand : GetFurCommand("找毛图"), SessionCommand {
         if (fid != null) {
             respond(target, fid)
         } else {
-            val hint = "这不是一个数字，或许你想用 ${GetFidsByNameCommand.primaryName} 命令？"
-            if (sender is Member) {
-                target.sendMessage {
-                    // Ping
-                    add(At(sender))
-
-                    // Hint
-                    add(" $hint")
-                }
-            } else if (sender is Friend) {
-                target.sendMessage(hint)
-            }
+            sender.sendMessageDifferently("这不是一个数字，或许你想用 ${GetFidsByNameCommand.primaryName} 命令？")
         }
     }
 
