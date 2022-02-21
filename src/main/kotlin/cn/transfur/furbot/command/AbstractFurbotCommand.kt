@@ -7,7 +7,11 @@ import net.mamoe.mirai.console.command.FriendCommandSenderOnMessage
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.console.command.CompositeCommand
-import net.mamoe.mirai.contact.*
+import net.mamoe.mirai.contact.Contact
+import net.mamoe.mirai.contact.Friend
+import net.mamoe.mirai.contact.Group
+import net.mamoe.mirai.contact.Member
+import net.mamoe.mirai.contact.User
 
 abstract class FurbotSimpleCommand(
     primaryName: String
