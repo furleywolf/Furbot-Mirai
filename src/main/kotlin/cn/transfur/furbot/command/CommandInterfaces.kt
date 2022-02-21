@@ -2,7 +2,6 @@ package cn.transfur.furbot.command
 
 import cn.transfur.furbot.Config
 import cn.transfur.furbot.network.TailApiClient
-import cn.transfur.furbot.util.sendMessage
 import cn.transfur.furbot.util.sendMessageDifferently
 import net.mamoe.mirai.console.command.Command
 import net.mamoe.mirai.contact.Contact
@@ -47,22 +46,12 @@ interface SessionCommand : Command {
     private suspend inline fun <reified R : SingleMessage> User.listen(
         timeout: Int = 30
     ): R? = when (this) {
-        is Member -> listenImpl<GroupMessageEvent, R>(timeout).also { answer ->
-            if (answer == null) {
-                group.sendMessage {
-                    // Ping
-                    add(At(this@listen))
-
-                    // Question
-                    add(" 回复太慢啦，我只听 $timeout 秒")
-                }
-            }
-        }
-        is Friend -> listenImpl<FriendMessageEvent, R>(timeout).also { answer ->
-            if (answer == null)
-                sendMessage("回复太慢啦，我只听 $timeout 秒")
-        }
+        is Member -> listenImpl<GroupMessageEvent, R>(timeout)
+        is Friend -> listenImpl<FriendMessageEvent, R>(timeout)
         else -> error("Unsupported operation from Temp $id")
+    }.also { answer ->
+        if (answer == null)
+            sendMessageDifferently("回复太慢啦，我只听 $timeout 秒")
     }
 
     private suspend inline fun <reified E : MessageEvent, reified R : SingleMessage> User.listenImpl(
