@@ -38,7 +38,7 @@ interface SessionCommand : Command {
                 add(" $question")
             }
 
-            val answer = listen<GroupMessageEvent, PlainText>(timeout)
+            val answer = this.listen<GroupMessageEvent, PlainText>(timeout)
 
             if (answer == null) {
                 group.sendMessage {
@@ -55,7 +55,7 @@ interface SessionCommand : Command {
         is Friend -> {
             sendMessage(question)
 
-            val answer = listen<FriendMessageEvent, PlainText>(timeout)
+            val answer = this.listen<FriendMessageEvent, PlainText>(timeout)
 
             if (answer == null)
                 sendMessage("回复太慢啦，我只听 $timeout 秒")
@@ -67,8 +67,8 @@ interface SessionCommand : Command {
 
     private suspend inline fun <reified E : MessageEvent, reified R : SingleMessage> User.listen(
         timeout: Int = 30
-    ): R? = nextEventOrNull<E>(1000L * timeout) {
-        it.sender.id == id && it.message.firstIsInstanceOrNull<R>() != null
+    ): R? = nextEventOrNull<E>(1000L * timeout) { event ->
+        event.sender.id == this.id && event.message.firstIsInstanceOrNull<R>() != null
     }?.message?.firstIsInstance()
 }
 

@@ -15,7 +15,7 @@ object GetFurRandCommand : GetFurCommand("来只毛") {
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run() = differContact { respond(it) }
+    suspend fun CommandSenderOnMessage<*>.run() = runBoth { target, _ -> respond(target) }
 
     private suspend fun respond(target: Contact) {
         val furPic = getFurRand() ?: return // Swallow here

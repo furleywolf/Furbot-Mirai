@@ -16,48 +16,42 @@ object GoodNightCommand : FurbotSimpleCommand("晚安"), GroupOnlyCommand {
     override val description: String = "Mute self if is normal member, or mute a certain member if is op"
 
     @Handler
-    suspend fun MemberCommandSenderOnMessage.run() {
-        if (!Config.furbot.respondGroups)
-            return
-
-        if (user.isOperator()) {
+    suspend fun MemberCommandSenderOnMessage.run() = run { group, sender ->
+        if (sender.isOperator()) {
             group.sendMessage {
                 // Ping
-                add(At(user))
+                add(At(sender))
 
                 // Info
                 add(" 不可以晚安哦")
             }
         } else {
-            execute(user, user)
+            execute(sender, sender)
         }
     }
 
     @Handler
-    suspend fun MemberCommandSenderOnMessage.run(ping: At) {
-        if (!Config.furbot.respondGroups)
-            return
-
+    suspend fun MemberCommandSenderOnMessage.run(ping: At) = run { group, sender ->
         val target = group[ping.target]
 
         if (target != null) {
-            if (user.id == target.id) {
+            if (sender.id == target.id) {
                 run()
-            } else if (!user.isOperator() || target.isOperator()) {
+            } else if (!sender.isOperator() || target.isOperator()) {
                 group.sendMessage {
                     // Ping
-                    add(At(user))
+                    add(At(sender))
 
                     // Info
                     add(" 你不可以向 ${ping.getDisplay(group)} 说晚安哦")
                 }
             } else {
-                execute(user, target)
+                execute(sender, target)
             }
         } else {
             group.sendMessage {
                 // Ping
-                add(At(user))
+                add(At(sender))
 
                 // Info
                 add(" 在此群中找不到群成员：${ping.getDisplay(group)}")

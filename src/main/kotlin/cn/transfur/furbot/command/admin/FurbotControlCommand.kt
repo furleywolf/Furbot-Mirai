@@ -1,9 +1,9 @@
 package cn.transfur.furbot.command.admin
 
-import cn.transfur.furbot.Config
 import cn.transfur.furbot.KotlinPluginMain
 import cn.transfur.furbot.command.FurbotCompositeCommand
 import cn.transfur.furbot.command.GroupOnlyCommand
+import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.Command.Companion.allNames
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.console.permission.AbstractPermitteeId
@@ -11,18 +11,22 @@ import net.mamoe.mirai.console.permission.PermissionService.Companion.cancel
 import net.mamoe.mirai.console.permission.PermissionService.Companion.permit
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.isOperator
+import net.mamoe.mirai.message.data.At
 
 object FurbotControlCommand : FurbotCompositeCommand("furbot"), GroupOnlyCommand {
     override val description: String = "Control all commands in the furbot scope"
 
     @SubCommand("on", "开")
-    suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) {
-        if (!Config.furbot.respondGroups)
-            return
-        
+    suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) = run { group, sender ->
         // Warn if is not operator
-        if (!user.isOperator()) {
-            group.sendMessage("权限不足，只有本群管理员才能使用此命令")
+        if (!sender.isOperator()) {
+            group.sendMessage {
+                // Ping
+                add(At(sender))
+
+                // Warn
+                add("权限不足，只有本群管理员才能使用此命令")
+            }
             return
         }
 
@@ -34,13 +38,16 @@ object FurbotControlCommand : FurbotCompositeCommand("furbot"), GroupOnlyCommand
     }
 
     @SubCommand("off", "关")
-    suspend fun MemberCommandSenderOnMessage.off(commandName: String? = null) {
-        if (!Config.furbot.respondGroups)
-            return
-        
+    suspend fun MemberCommandSenderOnMessage.off(commandName: String? = null) = run { group, sender ->
         // Warn if is not operator
-        if (!user.isOperator()) {
-            group.sendMessage("权限不足，只有本群管理员才能使用此命令")
+        if (!sender.isOperator()) {
+            group.sendMessage {
+                // Ping
+                add(At(sender))
+
+                // Warn
+                add("权限不足，只有本群管理员才能使用此命令")
+            }
             return
         }
 

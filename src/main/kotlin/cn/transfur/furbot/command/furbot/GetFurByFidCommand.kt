@@ -5,6 +5,9 @@ import cn.transfur.furbot.data.FurPic
 import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
+import net.mamoe.mirai.contact.Friend
+import net.mamoe.mirai.contact.Member
+import net.mamoe.mirai.message.data.At
 
 object GetFurByFidCommand : GetFurCommand("找毛图"), SessionCommand {
     private const val API_PATH: String = "api/v2/getFursuitByID"
@@ -16,18 +19,29 @@ object GetFurByFidCommand : GetFurCommand("找毛图"), SessionCommand {
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run() = differContact { target ->
-        val fidString = fromEvent.sender.ask("你想找 fid 为多少的图片？") ?: return@differContact
+    suspend fun CommandSenderOnMessage<*>.run() = runBoth { target, sender ->
+        val fidString = sender.ask("你想找 fid 为多少的图片？") ?: return@runBoth
         val fid = fidString.toIntOrNull()
-        if (fid == null) {
-            target.sendMessage("这不是一个数字，或许你想用 ${GetFidsByNameCommand.primaryName} 命令？")
-        } else {
+        if (fid != null) {
             respond(target, fid)
+        } else {
+            val hint = "这不是一个数字，或许你想用 ${GetFidsByNameCommand.primaryName} 命令？"
+            if (sender is Member) {
+                target.sendMessage {
+                    // Ping
+                    add(At(sender))
+
+                    // Hint
+                    add(" $hint")
+                }
+            } else if (sender is Friend) {
+                target.sendMessage(hint)
+            }
         }
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run(fid: Int) = differContact { respond(it, fid) }
+    suspend fun CommandSenderOnMessage<*>.run(fid: Int) = runBoth { target, _ -> respond(target, fid) }
 
     private suspend fun respond(target: Contact, fid: Int) {
         val furPic = getFurByFid(fid)

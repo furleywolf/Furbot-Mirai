@@ -23,13 +23,13 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid"), SessionCommand {
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run() = differContact { target ->
-        val name = fromEvent.sender.ask("你想查哪只毛毛？") ?: return@differContact
+    suspend fun CommandSenderOnMessage<*>.run() = runBoth { target, sender ->
+        val name = sender.ask("你想查哪只毛毛？") ?: return@runBoth
         differRespond(target, name)
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run(name: String) = differContact { differRespond(it, name) }
+    suspend fun CommandSenderOnMessage<*>.run(name: String) = runBoth { target, _ -> differRespond(target, name) }
 
     private suspend fun differRespond(target: Contact, name: String) {
         if (name != "绒狸") {
