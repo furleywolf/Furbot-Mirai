@@ -1,25 +1,23 @@
 package cn.transfur.furbot.command.furbot
 
-import cn.transfur.furbot.command.FurbotSimpleCommand
 import cn.transfur.furbot.command.SessionCommand
 import cn.transfur.furbot.data.Fids
-import cn.transfur.furbot.network.TailApiClient
 import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.contact.Contact
 
-object GetFidsByNameCommand : FurbotSimpleCommand("查fid"), SessionCommand {
-    private const val API_PATH: String = "api/v2/getFursuitFid"
-
-    override val description: String = "Get fids based on name from Tail API"
-
+object GetFidsByNameCommand : TailApiAwareCommand(
+    apiPath = "api/v2/getFursuitFid",
+    primaryName = "查fid",
+    description = "Get fids based on name from Tail API"
+), SessionCommand {
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
     override val prefixOptional: Boolean = true
 
-    suspend fun getFidsByName(name: String): Fids { // Never 404, instead returns empty list
-        return TailApiClient.getFromTailApi(Fids.serializer(), API_PATH, "name" to name)!!
+    suspend operator fun invoke(name: String): Fids { // Never 404, instead returns empty list
+        return getFromTailApi(Fids.serializer(), "name" to name)!!
     }
 
     @Handler
@@ -40,7 +38,7 @@ object GetFidsByNameCommand : FurbotSimpleCommand("查fid"), SessionCommand {
     }
 
     private suspend fun respond(target: Contact, name: String) {
-        val fids = getFidsByName(name)
+        val fids = invoke(name)
 
         if (fids.isEmpty()) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")

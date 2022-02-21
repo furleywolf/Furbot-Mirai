@@ -12,9 +12,10 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
-object GoodNightCommand : FurbotSimpleCommand("晚安"), GroupOnlyCommand {
-    override val description: String = "Mute self if is normal member, or mute a certain member if is op"
-
+object GoodNightCommand : FurbotSimpleCommand(
+    primaryName = "晚安",
+    description = "Mute self if is normal member, or mute a certain member if is op"
+), GroupOnlyCommand {
     @Handler
     suspend fun MemberCommandSenderOnMessage.run() = run { group, sender ->
         if (sender.isOperator()) {

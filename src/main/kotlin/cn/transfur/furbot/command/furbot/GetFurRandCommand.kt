@@ -5,20 +5,20 @@ import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
 
-object GetFurRandCommand : GetFurCommand("来只毛") {
-    private const val API_PATH: String = "api/v2/getFursuitRand"
-
-    override val description: String = "Get random fursuit from Tail API"
-
-    suspend fun getFurRand(): FurPic? {
-        return getFurPicSimple(API_PATH)
+object GetFurRandCommand : GetFurCommand(
+    apiPath = "api/v2/getFursuitRand",
+    primaryName = "来只毛",
+    description = "Get random fursuit from Tail API"
+) {
+    suspend operator fun invoke(): FurPic { // Never 404
+        return getFurPic()!!
     }
 
     @Handler
     suspend fun CommandSenderOnMessage<*>.run() = runBoth { target, _ -> respond(target) }
 
     private suspend fun respond(target: Contact) {
-        val furPic = getFurRand() ?: return // Swallow here
+        val furPic = invoke()
 
         target.sendMessage {
             // Result text

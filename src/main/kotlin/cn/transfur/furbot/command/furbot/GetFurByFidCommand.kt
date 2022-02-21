@@ -7,13 +7,13 @@ import cn.transfur.furbot.util.sendMessageDifferently
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
 
-object GetFurByFidCommand : GetFurCommand("找毛图"), SessionCommand {
-    private const val API_PATH: String = "api/v2/getFursuitByID"
-
-    override val description: String = "Get fursuit based on fid from Tail API"
-
-    suspend fun getFurByFid(fid: Int): FurPic? {
-        return getFurPicSimple(API_PATH, "fid" to fid)
+object GetFurByFidCommand : GetFurCommand(
+    apiPath = "api/v2/getFursuitByID",
+    primaryName = "找毛图",
+    description = "Get fursuit based on fid from Tail API"
+), SessionCommand {
+    suspend operator fun invoke(fid: Int): FurPic? {
+        return getFurPic("fid" to fid)
     }
 
     @Handler
@@ -31,7 +31,7 @@ object GetFurByFidCommand : GetFurCommand("找毛图"), SessionCommand {
     suspend fun CommandSenderOnMessage<*>.run(fid: Int) = runBoth { target, _ -> respond(target, fid) }
 
     private suspend fun respond(target: Contact, fid: Int) {
-        val furPic = getFurByFid(fid)
+        val furPic = invoke(fid)
 
         if (furPic == null) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")

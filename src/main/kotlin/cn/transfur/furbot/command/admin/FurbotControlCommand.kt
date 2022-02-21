@@ -13,9 +13,10 @@ import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.message.data.At
 
-object FurbotControlCommand : FurbotCompositeCommand("furbot"), GroupOnlyCommand {
-    override val description: String = "Control all commands in the furbot scope"
-
+object FurbotControlCommand : FurbotCompositeCommand(
+    primaryName = "furbot",
+    description = "Control all commands in the furbot scope"
+), GroupOnlyCommand {
     @SubCommand("on", "开")
     suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) = run { group, sender ->
         // Warn if is not operator

@@ -14,8 +14,13 @@ import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.User
 
 abstract class FurbotSimpleCommand(
-    primaryName: String
-) : SimpleCommand(KotlinPluginMain, primaryName), FurbotCommand {
+    primaryName: String,
+    description: String
+) : SimpleCommand(
+    owner = KotlinPluginMain,
+    primaryName = primaryName,
+    description = description
+), FurbotCommand {
     protected inline fun CommandSenderOnMessage<*>.runBoth(action: (target: Contact, sender: User) -> Unit) {
         when (this) {
             is MemberCommandSenderOnMessage -> run(action)
@@ -35,8 +40,13 @@ abstract class FurbotSimpleCommand(
 }
 
 abstract class FurbotCompositeCommand(
-    primaryName: String
-) : CompositeCommand(KotlinPluginMain, primaryName), FurbotCommand {
+    primaryName: String,
+    description: String
+) : CompositeCommand(
+    owner = KotlinPluginMain,
+    primaryName = primaryName,
+    description = description
+), FurbotCommand {
     protected inline fun CommandSenderOnMessage<*>.runBoth(action: (Contact, User) -> Unit) {
         when (this) {
             is MemberCommandSenderOnMessage -> run(action)
