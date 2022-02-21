@@ -27,18 +27,20 @@
 #### 配置相关
 
 ```yaml
-# 与吸毛模块相关的配置
-furbot:
-  # 申请开源版地址的 QQ 号码
-  qq: 0
-  # 申请开源版地址的授权码
-  authKey: 0
+# 基本配置
+global:
   # 是否显示绒狸开源版尾巴（默认开启）
   showTail: true
   # 是否响应私聊消息（默认关闭）
   respondFriends: false
   # 是否响应群聊消息（默认开启）
   respondGroups: true
+# 与吸毛模块相关的配置
+furbot:
+  # 申请开源版地址的 QQ 号码
+  qq: 0
+  # 申请开源版地址的授权码
+  authKey: ''
 # .晚安相关配置
 goodNight:
   # 最早睡觉时间，以 hh:MM:ss 的形式表示，24 小时制

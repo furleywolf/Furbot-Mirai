@@ -1,4 +1,4 @@
-package cn.transfur.furbot.command.core
+package cn.transfur.furbot.command.furbot
 
 import cn.transfur.furbot.command.FurbotSimpleCommand
 import cn.transfur.furbot.command.ImageAwareCommand

@@ -1,4 +1,4 @@
-package cn.transfur.furbot.command.core
+package cn.transfur.furbot.command.furbot
 
 import cn.transfur.furbot.data.FurPic
 import cn.transfur.furbot.util.sendMessage

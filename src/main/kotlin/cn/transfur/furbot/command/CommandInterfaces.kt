@@ -23,7 +23,7 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 
 interface FurbotCommand : Command {
     fun MessageChainBuilder.addTail(tail: String = "--- 绒狸开源版 ---") {
-        if (Config.furbot.showTail)
+        if (Config.global.showTail)
             add(tail)
     }
 }

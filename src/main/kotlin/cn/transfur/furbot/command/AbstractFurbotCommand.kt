@@ -24,12 +24,12 @@ abstract class FurbotSimpleCommand(
     }
 
     protected inline fun MemberCommandSenderOnMessage.run(action: (group: Group, sender: Member) -> Unit) {
-        if (Config.furbot.respondGroups)
+        if (Config.global.respondGroups)
             action(group, user)
     }
 
     protected inline fun FriendCommandSenderOnMessage.run(action: (friend: Friend, sender: Friend) -> Unit) {
-        if (Config.furbot.respondFriends)
+        if (Config.global.respondFriends)
             action(user, user)
     }
 }
@@ -45,12 +45,12 @@ abstract class FurbotCompositeCommand(
     }
 
     protected inline fun MemberCommandSenderOnMessage.run(action: (Group, Member) -> Unit) {
-        if (Config.furbot.respondGroups)
+        if (Config.global.respondGroups)
             action(group, user)
     }
 
     protected inline fun FriendCommandSenderOnMessage.run(action: (Friend, Friend) -> Unit) {
-        if (Config.furbot.respondFriends)
+        if (Config.global.respondFriends)
             action(user, user)
     }
 }
