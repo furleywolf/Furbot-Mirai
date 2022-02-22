@@ -30,20 +30,23 @@ interface FurbotCommand : Command {
 
 interface SessionCommand : Command {
     /**
-     * 以 [指定问题][question] 询问 [该用户][this]，期望获得文本回复.
+     * 以 [指定问题][question] 询问 [该用户][this]
+     *
+     * @return 文本回复
      */
-    suspend fun User.ask(question: String?, timeout: Int = 30): String? {
-        if (question != null)
-            sendMessageDifferently(question)
+    suspend fun User.ask(question: String, timeout: Int = 30): String? {
+        sendMessageDifferently(question)
         val answer = listen<PlainText>(timeout)
         return answer?.content
     }
 
     /**
-     * 询问 [该用户][this]，期望获得图片 URL.
+     * 以 [指定问题][question] 请求 [该用户][this] 发送一张 [图片][Image]
+     *
+     * @return 图片 URL
      */
-    suspend fun User.askForImage(timeout: Int = 30): String? {
-        sendMessageDifferently("请发送一张图片")
+    suspend fun User.askForImage(question: String, timeout: Int = 30): String? {
+        sendMessageDifferently(question)
         val answer = listen<Image>(timeout)
         return answer?.queryUrl()
     }
