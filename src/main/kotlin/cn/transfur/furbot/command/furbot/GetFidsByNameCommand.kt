@@ -16,7 +16,7 @@ object GetFidsByNameCommand : TailApiAwareCommand(
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
     override val prefixOptional: Boolean = true
 
-    suspend operator fun invoke(name: String): Fids { // Never 404, instead returns empty list
+    suspend fun get(name: String): Fids { // Never 404, instead returns empty list
         return getFromTailApi(Fids.serializer(), "name" to name)!!
     }
 
@@ -38,7 +38,7 @@ object GetFidsByNameCommand : TailApiAwareCommand(
     }
 
     private suspend fun respond(target: Contact, name: String) {
-        val fids = invoke(name)
+        val fids = get(name)
 
         if (fids.isEmpty()) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")

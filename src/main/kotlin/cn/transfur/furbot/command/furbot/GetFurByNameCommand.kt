@@ -11,7 +11,7 @@ object GetFurByNameCommand : GetFurCommand(
     primaryName = "来只",
     description = "Get fursuit based on name from Tail API"
 ), SessionCommand {
-    suspend operator fun invoke(name: String): FurPic? {
+    suspend fun get(name: String): FurPic? {
         return getFurPic("name" to name)
     }
 
@@ -33,7 +33,7 @@ object GetFurByNameCommand : GetFurCommand(
     }
 
     private suspend fun respond(target: Contact, name: String) {
-        val furPic = invoke(name)
+        val furPic = get(name)
 
         if (furPic == null) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")

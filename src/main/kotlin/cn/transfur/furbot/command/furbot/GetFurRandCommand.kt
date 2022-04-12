@@ -10,7 +10,7 @@ object GetFurRandCommand : GetFurCommand(
     primaryName = "来只毛",
     description = "Get random fursuit from Tail API"
 ) {
-    suspend operator fun invoke(): FurPic { // Never 404
+    suspend fun get(): FurPic { // Never 404
         return getFurPic()!!
     }
 
@@ -18,7 +18,7 @@ object GetFurRandCommand : GetFurCommand(
     suspend fun CommandSenderOnMessage<*>.run() = runBoth { target, _ -> respond(target) }
 
     private suspend fun respond(target: Contact) {
-        val furPic = invoke()
+        val furPic = get()
 
         target.sendMessage {
             // Result text

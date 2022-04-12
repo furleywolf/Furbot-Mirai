@@ -2,10 +2,7 @@ package cn.transfur.furbot
 
 import cn.transfur.furbot.command.GroupOnlyCommand
 import cn.transfur.furbot.command.admin.FurbotControlCommand
-import cn.transfur.furbot.command.furbot.GetFidsByNameCommand
-import cn.transfur.furbot.command.furbot.GetFurByFidCommand
-import cn.transfur.furbot.command.furbot.GetFurByNameCommand
-import cn.transfur.furbot.command.furbot.GetFurRandCommand
+import cn.transfur.furbot.command.furbot.*
 import cn.transfur.furbot.command.misc.GoodNightCommand
 import cn.transfur.furbot.command.misc.HelpCommand
 import cn.transfur.furbot.network.TailApiClient
@@ -47,6 +44,7 @@ object KotlinPluginMain : KotlinPlugin(
             GetFurByNameCommand,
             GetFurRandCommand,
             GetFidsByNameCommand,
+            PostFurCommand,
 
             // misc
             GoodNightCommand,

@@ -3,7 +3,6 @@ package cn.transfur.furbot.command.furbot
 import cn.transfur.furbot.command.SessionCommand
 import cn.transfur.furbot.data.FurPic
 import cn.transfur.furbot.util.sendMessage
-import cn.transfur.furbot.util.sendMessageDifferently
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.contact.Contact
 
@@ -12,26 +11,21 @@ object GetFurByFidCommand : GetFurCommand(
     primaryName = "找毛图",
     description = "Get fursuit based on fid from Tail API"
 ), SessionCommand {
-    suspend operator fun invoke(fid: Int): FurPic? {
+    suspend fun get(fid: String): FurPic? {
         return getFurPic("fid" to fid)
     }
 
     @Handler
     suspend fun CommandSenderOnMessage<*>.run() = runBoth { target, sender ->
-        val fidString = sender.ask("你想找 fid 为多少的图片？") ?: return@runBoth
-        val fid = fidString.toIntOrNull()
-        if (fid != null) {
-            respond(target, fid)
-        } else {
-            sender.sendMessageDifferently("这不是一个数字，或许你想用 ${GetFidsByNameCommand.primaryName} 命令？")
-        }
+        val fid = sender.ask("你想找 fid 是什么的图片？") ?: return@runBoth
+        respond(target, fid)
     }
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run(fid: Int) = runBoth { target, _ -> respond(target, fid) }
+    suspend fun CommandSenderOnMessage<*>.run(fid: String) = runBoth { target, _ -> respond(target, fid) }
 
-    private suspend fun respond(target: Contact, fid: Int) {
-        val furPic = invoke(fid)
+    private suspend fun respond(target: Contact, fid: String) {
+        val furPic = get(fid)
 
         if (furPic == null) {
             target.sendMessage("这只毛毛还没有被收录，请联系开发者添加哦~")

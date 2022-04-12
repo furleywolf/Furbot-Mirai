@@ -21,6 +21,7 @@ object TailApiClient {
 
     private val json: Json = Json {
         ignoreUnknownKeys = true
+        isLenient = true
     }
 
     suspend fun <T> getFromTailApi(
