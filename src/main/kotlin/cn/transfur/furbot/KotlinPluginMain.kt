@@ -45,6 +45,7 @@ object KotlinPluginMain : KotlinPlugin(
             GetFurRandCommand,
             GetFidsByNameCommand,
             PostFurCommand,
+            GetDailyFurCommand,
 
             // misc
             GoodNightCommand,

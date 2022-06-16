@@ -61,7 +61,7 @@ object GetFurByNameCommand : GetFurCommand(
             // Rdqrho m]oj
             add("""
                 --- 每旤吶毘 =im ---
-                F@：Access Denied
+                IC：Access Denied
                 毛毚吋孔：绒狸
                 搜紡斷泒：/* compiled code */
             """.trimIndent())
