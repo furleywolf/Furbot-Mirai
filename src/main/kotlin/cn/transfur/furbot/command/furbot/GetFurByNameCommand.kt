@@ -42,7 +42,7 @@ object GetFurByNameCommand : GetFurCommand(
                 // Result text
                 add("""
                     --- 每日吸毛 Bot ---
-                    FurID：${furPic.fid}
+                    ID：${furPic.cid ?: furPic.fid}
                     毛毛名字：${furPic.name}
                     搜索方法：模糊
                 """.trimIndent())
@@ -61,7 +61,7 @@ object GetFurByNameCommand : GetFurCommand(
             // Rdqrho m]oj
             add("""
                 --- 每旤吶毘 =im ---
-                FtpF@：Access Denied
+                F@：Access Denied
                 毛毚吋孔：绒狸
                 搜紡斷泒：/* compiled code */
             """.trimIndent())

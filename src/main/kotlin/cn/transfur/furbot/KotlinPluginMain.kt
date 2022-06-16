@@ -40,7 +40,7 @@ object KotlinPluginMain : KotlinPlugin(
     val userCommands: Array<Command> by lazy {
         arrayOf(
             // furbot
-            GetFurByFidCommand,
+            GetFurByIdCommand,
             GetFurByNameCommand,
             GetFurRandCommand,
             GetFidsByNameCommand,

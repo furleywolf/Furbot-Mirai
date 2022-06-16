@@ -15,7 +15,7 @@
 
 ### 这是什么
 
-`Furbot-mirai`是一个封装了绒狸基础功能的 [Mirai Console](https://github.com/mamoe/mirai-console) 插件，提供如`来只毛`、`来只 <name>`、`找毛图 <fid>`等受好评的命令，支持群聊与私聊响应，享受快乐吸毛生活。
+`Furbot-mirai`是一个封装了绒狸基础功能的 [Mirai Console](https://github.com/mamoe/mirai-console) 插件，提供如`来只毛`、`来只 <name>`、`找毛图 <id>`等受好评的命令，支持群聊与私聊响应，享受快乐吸毛生活。
 
 ### 如何使用
 

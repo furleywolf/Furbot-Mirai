@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Fids(
-    val fids: List<String>
-) : List<String> by fids
+    val fids: List<Int>
+) : List<Int> by fids

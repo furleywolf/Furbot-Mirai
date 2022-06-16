@@ -25,7 +25,7 @@ object GetFurRandCommand : GetFurCommand(
             add("""
                 --- 每日吸毛 Bot ---
                 今天你吸毛了嘛？
-                FurID：${furPic.fid}
+                ID：${furPic.cid ?: furPic.fid}
                 毛毛名字：${furPic.name}
                 搜索方法：全局随机
             """.trimIndent())
