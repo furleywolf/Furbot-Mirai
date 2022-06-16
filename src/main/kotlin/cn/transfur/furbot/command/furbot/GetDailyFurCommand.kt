@@ -23,18 +23,17 @@ object GetDailyFurCommand : FurbotSimpleCommand(
     ): DailyFur? = TailApiClient.getFromTailApi(DailyFur.serializer(), apiPath, *extraParameters)
 
     @Handler
-    suspend fun CommandSenderOnMessage<*>.run() = runBoth { target, _ ->
-        respond(target, getDailyFur(
-            apiPath = "api/v2/DailyFursuit/Rand"
-        ))
-    }
-
-    @Handler
     suspend fun CommandSenderOnMessage<*>.run(name: String) = runBoth { target, _ ->
-        respond(target, getDailyFur(
-            apiPath = "api/v2/DailyFursuit/name",
-            "name" to name
-        ))
+        if (name == "随机") {
+            respond(target, getDailyFur(
+                apiPath = "api/v2/DailyFursuit/Rand"
+            ))
+        } else {
+            respond(target, getDailyFur(
+                apiPath = "api/v2/DailyFursuit/name",
+                "name" to name
+            ))
+        }
     }
 
     @Handler
