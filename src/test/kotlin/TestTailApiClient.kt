@@ -12,11 +12,11 @@ import kotlinx.serialization.json.Json
 private val json = Json { ignoreUnknownKeys = true }
 
 suspend fun main() {
-    val response = HttpClient(OkHttp).use {
+    val response = HttpClient(OkHttp).use { client ->
         val timestamp = System.currentTimeMillis() / 1000L
         val apiPath = "api/v2/getFursuitFid"
         try {
-            it.get<String> {
+            client.get<String> {
                 url("https://api.tail.icu/$apiPath")
                 parameter("qq", System.getenv("qq"))
                 parameter("timestamp", timestamp)
