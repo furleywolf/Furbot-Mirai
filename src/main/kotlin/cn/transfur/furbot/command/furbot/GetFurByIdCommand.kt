@@ -36,7 +36,7 @@ object GetFurByIdCommand : GetFurCommand(
                     --- 每日吸毛 Bot ---
                     ID：${furPic.cid ?: furPic.fid}
                     毛毛名字：${furPic.name}
-                    搜索方法：按 FurID 查找
+                    搜索方法：按 ID 查找
                 """.trimIndent())
 
                 // Image
