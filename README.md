@@ -15,7 +15,7 @@
 
 ### 这是什么
 
-`Furbot-mirai`是一个封装了绒狸基础功能的 [Mirai Console](https://github.com/mamoe/mirai-console) 插件，提供如`来只毛`、`来只 <name>`、`找毛图 <fid>`等受好评的命令，支持群聊与私聊响应，享受快乐吸毛生活。
+`Furbot-mirai`是一个封装了绒狸基础功能的 [Mirai Console](https://github.com/mamoe/mirai-console) 插件，提供如`来只毛`、`来只 <name>`、`找毛图 <id>`等受好评的命令，支持群聊与私聊响应，享受快乐吸毛生活。
 
 ### 如何使用
 
@@ -27,18 +27,20 @@
 #### 配置相关
 
 ```yaml
-# 与吸毛模块相关的配置
-furbot:
-  # 申请开源版地址的 QQ 号码
-  qq: 0
-  # 申请开源版地址的授权码
-  authKey: 0
+# 基本配置
+global:
   # 是否显示绒狸开源版尾巴（默认开启）
   showTail: true
   # 是否响应私聊消息（默认关闭）
   respondFriends: false
   # 是否响应群聊消息（默认开启）
   respondGroups: true
+# 与吸毛模块相关的配置
+furbot:
+  # 申请开源版地址的 QQ 号码
+  qq: 0
+  # 申请开源版地址的授权码
+  authKey: ''
 # .晚安相关配置
 goodNight:
   # 最早睡觉时间，以 hh:MM:ss 的形式表示，24 小时制

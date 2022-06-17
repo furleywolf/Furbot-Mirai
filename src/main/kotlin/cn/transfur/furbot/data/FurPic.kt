@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class FurPic(
     @SerialName("id")
     val fid: Int,
+    val cid: String?,
     val name: String,
     val url: String
 )

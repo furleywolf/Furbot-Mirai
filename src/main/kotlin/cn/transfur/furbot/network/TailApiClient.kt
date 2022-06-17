@@ -17,8 +17,11 @@ object TailApiClient {
 
     private lateinit var client: HttpClient
 
+    private var isRunning: Boolean = false
+
     private val json: Json = Json {
         ignoreUnknownKeys = true
+        isLenient = true
     }
 
     suspend fun <T> getFromTailApi(
@@ -53,10 +56,16 @@ object TailApiClient {
     }
 
     fun open() {
+        if (isRunning)
+            return
         client = HttpClient(OkHttp)
+        isRunning = true
     }
 
     fun close() {
+        if (!isRunning)
+            return
         client.close()
+        isRunning = false
     }
 }

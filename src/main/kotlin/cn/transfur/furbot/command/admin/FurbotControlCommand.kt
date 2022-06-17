@@ -1,78 +1,98 @@
 package cn.transfur.furbot.command.admin
 
-import cn.transfur.furbot.Config
 import cn.transfur.furbot.KotlinPluginMain
 import cn.transfur.furbot.command.FurbotCompositeCommand
-import cn.transfur.furbot.command.GroupOnlyCommand
+import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.Command.Companion.allNames
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.console.permission.AbstractPermitteeId
+import net.mamoe.mirai.console.permission.Permission
 import net.mamoe.mirai.console.permission.PermissionService.Companion.cancel
 import net.mamoe.mirai.console.permission.PermissionService.Companion.permit
+import net.mamoe.mirai.console.permission.PermitteeId
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.isOperator
+import net.mamoe.mirai.message.data.At
 
-object FurbotControlCommand : FurbotCompositeCommand("furbot"), GroupOnlyCommand {
-    override val description: String = "Control all commands in the furbot scope"
-
+object FurbotControlCommand : FurbotCompositeCommand(
+    primaryName = "furbot",
+    description = "Control all commands in the furbot scope"
+) {
     @SubCommand("on", "开")
-    suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) {
-        if (!Config.furbot.respondGroups || !user.isOperator())
-            return
+    suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) = run { group, sender ->
+        // Warn if is not operator
+        if (!sender.isOperator()) {
+            group.sendMessage {
+                // Ping
+                add(At(sender))
+
+                // Warn
+                add("权限不足，只有本群管理员才能使用此命令")
+            }
+            return@run
+        }
 
         if (commandName == null) {
-            executeAll(group, true)
+            executeAll(group, Operation.ON)
         } else {
-            executeSingle(group, true, commandName)
+            executeSingle(group, Operation.ON, commandName)
         }
     }
 
     @SubCommand("off", "关")
-    suspend fun MemberCommandSenderOnMessage.off(commandName: String? = null) {
-        if (!Config.furbot.respondGroups || !user.isOperator())
-            return
+    suspend fun MemberCommandSenderOnMessage.off(commandName: String? = null) = run { group, sender ->
+        // Warn if is not operator
+        if (!sender.isOperator()) {
+            group.sendMessage {
+                // Ping
+                add(At(sender))
+
+                // Warn
+                add("权限不足，只有本群管理员才能使用此命令")
+            }
+            return@run
+        }
 
         if (commandName == null) {
-            executeAll(group, false)
+            executeAll(group, Operation.OFF)
         } else {
-            executeSingle(group, false, commandName)
+            executeSingle(group, Operation.OFF, commandName)
         }
     }
 
-    private suspend fun executeAll(group: Group, operation: Boolean) {
+    private suspend fun executeAll(group: Group, operation: Operation) {
         val permitteeId = AbstractPermitteeId.AnyMember(group.id)
-        val operationSpecification = if (operation) "开启" else "关闭"
 
-        if (operation) {
-            for (command in KotlinPluginMain.userCommands) {
-                permitteeId.permit(command.permission)
-            }
-        } else {
-            for (command in KotlinPluginMain.userCommands) {
-                permitteeId.cancel(command.permission, false)
-            }
-        }
-
-        group.sendMessage("已${operationSpecification}所有命令")
+        for (command in KotlinPluginMain.userCommands)
+            operation.action(permitteeId, command.permission)
+        group.sendMessage("已${operation.specification}所有命令")
     }
 
-    private suspend fun executeSingle(group: Group, operation: Boolean, commandName: String) {
+    private suspend fun executeSingle(group: Group, operation: Operation, commandName: String) {
         val permitteeId = AbstractPermitteeId.AnyMember(group.id)
-        val operationSpecification = if (operation) "开启" else "关闭"
 
         val command = KotlinPluginMain.userCommands.find { commandName in it.allNames }
-
         if (command == null) {
             group.sendMessage("找不到命令：$commandName")
             return
         }
 
-        if (operation) {
-            permitteeId.permit(command.permission)
-        } else {
-            permitteeId.cancel(command.permission, false)
-        }
+        operation.action(permitteeId, command.permission)
+        group.sendMessage("已${operation.specification}命令：$commandName")
+    }
 
-        group.sendMessage("已${operationSpecification}命令：$commandName")
+    private enum class Operation(val specification: String) {
+        ON("开启") {
+            override fun action(permitteeId: PermitteeId, permission: Permission) {
+                permitteeId.permit(permission)
+            }
+        },
+        OFF("关闭") {
+            override fun action(permitteeId: PermitteeId, permission: Permission) {
+                permitteeId.cancel(permission, false)
+            }
+        };
+
+        abstract fun action(permitteeId: PermitteeId, permission: Permission)
     }
 }

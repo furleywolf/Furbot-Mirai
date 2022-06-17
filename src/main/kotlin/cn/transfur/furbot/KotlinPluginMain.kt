@@ -1,11 +1,8 @@
 package cn.transfur.furbot
 
-import cn.transfur.furbot.command.GroupOnlyCommand
+import cn.transfur.furbot.command.FriendAccessCommand
 import cn.transfur.furbot.command.admin.FurbotControlCommand
-import cn.transfur.furbot.command.furbot.GetFidsByNameCommand
-import cn.transfur.furbot.command.furbot.GetFurByFidCommand
-import cn.transfur.furbot.command.furbot.GetFurByNameCommand
-import cn.transfur.furbot.command.furbot.GetFurRandCommand
+import cn.transfur.furbot.command.furbot.*
 import cn.transfur.furbot.command.misc.GoodNightCommand
 import cn.transfur.furbot.command.misc.HelpCommand
 import cn.transfur.furbot.network.TailApiClient
@@ -31,7 +28,7 @@ import net.mamoe.mirai.event.events.MessageEvent
 object KotlinPluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "cn.transfur.furbot",
-        version = "0.1.2",
+        version = "0.1.3",
         name = "Furbot"
     ) {
         author("Jmeow, Peanuuutz")
@@ -43,10 +40,12 @@ object KotlinPluginMain : KotlinPlugin(
     val userCommands: Array<Command> by lazy {
         arrayOf(
             // furbot
-            GetFurByFidCommand,
+            GetFurByIdCommand,
             GetFurByNameCommand,
             GetFurRandCommand,
             GetFidsByNameCommand,
+            PostFurCommand,
+            GetDailyFurCommand,
 
             // misc
             GoodNightCommand,
@@ -75,7 +74,7 @@ object KotlinPluginMain : KotlinPlugin(
         userCommands.forEach { command ->
             command.register()
 
-            if (command !is GroupOnlyCommand)
+            if (command is FriendAccessCommand)
                 AbstractPermitteeId.AnyFriend.permit(command.permission)
         }
     }
