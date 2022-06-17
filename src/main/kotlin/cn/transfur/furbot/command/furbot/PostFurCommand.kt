@@ -1,5 +1,6 @@
 package cn.transfur.furbot.command.furbot
 
+import cn.transfur.furbot.command.FriendAccessCommand
 import cn.transfur.furbot.command.FurbotSimpleCommand
 import cn.transfur.furbot.network.TailApiClient
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
@@ -12,7 +13,7 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 object PostFurCommand : FurbotSimpleCommand(
     primaryName = "投只毛",
     description = "Show qq miniprogram for post furs"
-) {
+), FriendAccessCommand {
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
     override val prefixOptional: Boolean = true
 

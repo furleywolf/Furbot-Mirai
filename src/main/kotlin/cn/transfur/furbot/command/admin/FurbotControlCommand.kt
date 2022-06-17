@@ -2,7 +2,6 @@ package cn.transfur.furbot.command.admin
 
 import cn.transfur.furbot.KotlinPluginMain
 import cn.transfur.furbot.command.FurbotCompositeCommand
-import cn.transfur.furbot.command.GroupOnlyCommand
 import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.Command.Companion.allNames
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
@@ -16,7 +15,7 @@ import net.mamoe.mirai.message.data.At
 object FurbotControlCommand : FurbotCompositeCommand(
     primaryName = "furbot",
     description = "Control all commands in the furbot scope"
-), GroupOnlyCommand {
+) {
     @SubCommand("on", "开")
     suspend fun MemberCommandSenderOnMessage.on(commandName: String? = null) = run { group, sender ->
         // Warn if is not operator
@@ -28,7 +27,7 @@ object FurbotControlCommand : FurbotCompositeCommand(
                 // Warn
                 add("权限不足，只有本群管理员才能使用此命令")
             }
-            return
+            return@run
         }
 
         if (commandName == null) {
@@ -49,7 +48,7 @@ object FurbotControlCommand : FurbotCompositeCommand(
                 // Warn
                 add("权限不足，只有本群管理员才能使用此命令")
             }
-            return
+            return@run
         }
 
         if (commandName == null) {

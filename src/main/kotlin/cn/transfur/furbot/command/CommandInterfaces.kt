@@ -4,10 +4,10 @@ import cn.transfur.furbot.Config
 import cn.transfur.furbot.network.TailApiClient
 import cn.transfur.furbot.util.sendMessageDifferently
 import net.mamoe.mirai.console.command.Command
-import net.mamoe.mirai.contact.Contact
-import net.mamoe.mirai.contact.Friend
-import net.mamoe.mirai.contact.Member
-import net.mamoe.mirai.contact.User
+import net.mamoe.mirai.console.command.CommandSenderOnMessage
+import net.mamoe.mirai.console.command.FriendCommandSenderOnMessage
+import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
+import net.mamoe.mirai.contact.*
 import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.event.events.MessageEvent
@@ -25,6 +25,11 @@ interface FurbotCommand : Command {
     fun MessageChainBuilder.addTail(tail: String = "--- 绒狸开源版 ---") {
         if (Config.global.showTail)
             add(tail)
+    }
+
+    suspend fun MemberCommandSenderOnMessage.run(action: suspend (group: Group, sender: Member) -> Unit) {
+        if (Config.global.respondGroups)
+            action(group, user)
     }
 }
 
@@ -77,4 +82,16 @@ interface ImageAwareCommand : Command {
     }
 }
 
-interface GroupOnlyCommand : Command
+interface FriendAccessCommand : FurbotCommand {
+    suspend fun CommandSenderOnMessage<*>.runBoth(action: suspend (target: Contact, sender: User) -> Unit) {
+        when (this) {
+            is MemberCommandSenderOnMessage -> run(action)
+            is FriendCommandSenderOnMessage -> run(action)
+        }
+    }
+
+    suspend fun FriendCommandSenderOnMessage.run(action: suspend (friend: Friend, sender: Friend) -> Unit) {
+        if (Config.global.respondFriends)
+            action(user, user)
+    }
+}

@@ -1,5 +1,6 @@
 package cn.transfur.furbot.command.furbot
 
+import cn.transfur.furbot.command.FriendAccessCommand
 import cn.transfur.furbot.data.FurPic
 import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
@@ -9,7 +10,7 @@ object GetFurRandCommand : GetFurCommand(
     apiPath = "api/v2/getFursuitRand",
     primaryName = "来只毛",
     description = "Get random fursuit from Tail API"
-) {
+), FriendAccessCommand {
     suspend fun get(): FurPic { // Never 404
         return getFurPic()!!
     }

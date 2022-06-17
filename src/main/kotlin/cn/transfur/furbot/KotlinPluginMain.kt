@@ -1,6 +1,6 @@
 package cn.transfur.furbot
 
-import cn.transfur.furbot.command.GroupOnlyCommand
+import cn.transfur.furbot.command.FriendAccessCommand
 import cn.transfur.furbot.command.admin.FurbotControlCommand
 import cn.transfur.furbot.command.furbot.*
 import cn.transfur.furbot.command.misc.GoodNightCommand
@@ -74,7 +74,7 @@ object KotlinPluginMain : KotlinPlugin(
         userCommands.forEach { command ->
             command.register()
 
-            if (command !is GroupOnlyCommand)
+            if (command is FriendAccessCommand)
                 AbstractPermitteeId.AnyFriend.permit(command.permission)
         }
     }
