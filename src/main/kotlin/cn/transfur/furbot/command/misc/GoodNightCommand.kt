@@ -2,7 +2,6 @@ package cn.transfur.furbot.command.misc
 
 import cn.transfur.furbot.Config
 import cn.transfur.furbot.command.FurbotSimpleCommand
-import cn.transfur.furbot.command.GroupOnlyCommand
 import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.MemberCommandSenderOnMessage
 import net.mamoe.mirai.contact.Member
@@ -15,7 +14,7 @@ import java.time.temporal.ChronoUnit
 object GoodNightCommand : FurbotSimpleCommand(
     primaryName = "晚安",
     description = "Mute self if is normal member, or mute a certain member if is op"
-), GroupOnlyCommand {
+) {
     @Handler
     suspend fun MemberCommandSenderOnMessage.run() = run { group, sender ->
         if (sender.isOperator()) {

@@ -1,5 +1,6 @@
 package cn.transfur.furbot.command.furbot
 
+import cn.transfur.furbot.command.FriendAccessCommand
 import cn.transfur.furbot.command.SessionCommand
 import cn.transfur.furbot.data.FurPic
 import cn.transfur.furbot.util.sendMessage
@@ -10,7 +11,7 @@ object GetFurByNameCommand : GetFurCommand(
     apiPath = "api/v2/getFursuitByName",
     primaryName = "来只",
     description = "Get fursuit based on name from Tail API"
-), SessionCommand {
+), SessionCommand, FriendAccessCommand {
     suspend fun get(name: String): FurPic? {
         return getFurPic("name" to name)
     }

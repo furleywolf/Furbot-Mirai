@@ -1,5 +1,6 @@
 package cn.transfur.furbot.command.furbot
 
+import cn.transfur.furbot.command.FriendAccessCommand
 import cn.transfur.furbot.command.SessionCommand
 import cn.transfur.furbot.data.Fids
 import cn.transfur.furbot.util.sendMessage
@@ -12,7 +13,7 @@ object GetFidsByNameCommand : TailApiAwareCommand(
     apiPath = "api/v2/getFursuitFid",
     primaryName = "查fid",
     description = "Get fids based on name from Tail API"
-), SessionCommand {
+), SessionCommand, FriendAccessCommand {
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
     override val prefixOptional: Boolean = true
 
