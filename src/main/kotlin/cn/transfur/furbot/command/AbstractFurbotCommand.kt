@@ -30,4 +30,4 @@ abstract class FurbotRawCommand(
     owner = KotlinPluginMain,
     primaryName = primaryName,
     description = description
-)
+), FurbotCommand

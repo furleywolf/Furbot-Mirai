@@ -21,38 +21,37 @@ object GetDailyFurCommand : FurbotRawCommand(
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
     override val prefixOptional: Boolean = true
 
+    suspend fun get(): DailyFur = getDailyFur("api/v2/DailyFursuit/Rand")!!
+
+    suspend fun get(id: Int): DailyFur? = getDailyFur("api/v2/DailyFursuit/id", "id" to id)
+
+    suspend fun get(name: String): DailyFur? = getDailyFur("api/v2/DailyFursuit/name", "name" to name)
+
     private suspend fun getDailyFur(
         apiPath: String,
         vararg extraParameters: Pair<String, Any?>
     ): DailyFur? = TailApiClient.getFromTailApi(DailyFur.serializer(), apiPath, *extraParameters)
 
     override suspend fun CommandSender.onCommand(args: MessageChain) {
-        if (this !is CommandSenderOnMessage<*>) {
+        if (this !is CommandSenderOnMessage<*>)
             return
-        }
         runBoth { target, _ ->
-            if (args.isEmpty()) { // Random
-                respond(target, getDailyFur(
-                    apiPath = "api/v2/DailyFursuit/Rand"
-                ))
+            val dailyFur = if (args.isEmpty()) { // Random
+                get()
             } else {
                 val arg = args[0]
-                if (arg !is PlainText) { // Other types won't be accepted
-                    return@runBoth
-                }
+                if (arg !is PlainText)
+                    return@runBoth // Other types won't be accepted
+
                 val idOrNull = arg.content.toIntOrNull()
                 if (idOrNull != null) { // By volume
-                    respond(target, getDailyFur(
-                        apiPath = "api/v2/DailyFursuit/id",
-                        "id" to idOrNull
-                    ))
-                } else { // By the fur's name
-                    respond(target, getDailyFur(
-                        apiPath = "api/v2/DailyFursuit/name",
-                        "name" to arg.content
-                    ))
+                    get(idOrNull)
+                } else { // By name
+                    get(arg.content)
                 }
             }
+
+            respond(target, dailyFur)
         }
     }
 
