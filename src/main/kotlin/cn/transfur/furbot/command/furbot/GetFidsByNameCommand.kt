@@ -1,7 +1,9 @@
 package cn.transfur.furbot.command.furbot
 
 import cn.transfur.furbot.command.FriendAccessCommand
+import cn.transfur.furbot.command.FurbotSimpleCommand
 import cn.transfur.furbot.command.SessionCommand
+import cn.transfur.furbot.command.TailApiAwareCommand
 import cn.transfur.furbot.data.Fids
 import cn.transfur.furbot.util.sendMessage
 import net.mamoe.mirai.console.command.CommandSenderOnMessage
@@ -9,13 +11,14 @@ import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.contact.Contact
 
-object GetFidsByNameCommand : TailApiAwareCommand(
-    apiPath = "api/v2/getFursuitFid",
+object GetFidsByNameCommand : FurbotSimpleCommand(
     primaryName = "查fid",
     description = "Get fids based on name from Tail API"
-), SessionCommand, FriendAccessCommand {
+), SessionCommand, TailApiAwareCommand, FriendAccessCommand {
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
     override val prefixOptional: Boolean = true
+
+    override val apiPath: String get() = "api/v2/getFursuitFid"
 
     suspend fun get(name: String): Fids { // Never 404, instead returns empty list
         return getFromTailApi(Fids.serializer(), "name" to name)!!
