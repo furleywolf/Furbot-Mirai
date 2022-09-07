@@ -2,6 +2,7 @@ package cn.transfur.furbot.command.furbot
 
 import cn.transfur.furbot.command.FriendAccessCommand
 import cn.transfur.furbot.command.FurbotRawCommand
+import cn.transfur.furbot.command.ImageAwareCommand
 import cn.transfur.furbot.data.DailyFur
 import cn.transfur.furbot.network.TailApiClient
 import net.mamoe.mirai.console.command.CommandSender
@@ -9,15 +10,13 @@ import net.mamoe.mirai.console.command.CommandSenderOnMessage
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.contact.Contact
-import net.mamoe.mirai.contact.Contact.Companion.sendImage
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 
 object GetDailyFurCommand : FurbotRawCommand(
     primaryName = "每日鉴毛",
     description = "Get Daily Fursuit from Tail API"
-), FriendAccessCommand {
+), FriendAccessCommand, ImageAwareCommand {
     @OptIn(ConsoleExperimentalApi::class, ExperimentalCommandDescriptors::class)
     override val prefixOptional: Boolean = true
 
@@ -57,9 +56,7 @@ object GetDailyFurCommand : FurbotRawCommand(
 
     private suspend fun respond(target: Contact, dailyFur: DailyFur?) {
         if (dailyFur != null) {
-            TailApiClient.getImageBytes(dailyFur.url)
-                .toExternalResource()
-                .use { target.sendImage(it) }
+            target.sendImage(dailyFur.url)
         } else {
             target.sendMessage("没有找到这一期每日鉴毛呢")
         }
